@@ -1,15 +1,17 @@
+'use client'
 import React from 'react';
 import { Container, Typography, Button, Stack, Box } from '@mui/material';
 import LandingCard from '@/components/LandingCard';
 import Image from 'next/image';
 import ProductSection from '@/components/ProductSection';
 import PricingSection from '@/components/PricingSection';
+import Link from 'next/link';
 
 const LandingPage = () => {
   return (
     <>
       <Container sx={{py:{xs: 5, lg: 10}}} maxWidth={false} >
-        <Stack sx={{minHeight: "1000px"}}id="landing" spacing={7} alignItems={"center"}>
+        <Stack sx={{minHeight: "1000px"}} spacing={7} alignItems={"center"}>
           <Typography sx={{textAlign: "center", fontSize: 52, fontWeight: "bold", maxWidth:{lg:"50%"}}} variant='h1'>
             <Image width={100} height={100} alt={'AI Flashcards'} src={'/icons/star.png'}/>
             Transform Your Learning with AI-Powered Flashcards
@@ -29,6 +31,19 @@ const LandingPage = () => {
         <ProductSection />
         <PricingSection/>
       </Container>
+      <Box
+        component="aside"
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+          zIndex: 1000, 
+        }}
+      >
+        <Link href="#home" style={{scrollBehavior: 'smooth'}}>
+          <Image alt="AI Flashcard" width={100} height={100} src={'/icons/arrowUp.png'} />
+        </Link>
+      </Box>
     </>
   );
 };
