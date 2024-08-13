@@ -19,7 +19,7 @@ const LandingPage = () => {
           <Typography sx={{fontSize: 24, textAlign:"center", maxWidth:{lg:"40%"}}} variant='h4'>
             <Box component={'span'} color={"accent.accent5"}>AI-generated flashcards </Box>that adapt to your needs and help you retain information <Box component={'span'} color={"accent.accent5"}>more effectively</Box>
           </Typography>
-          <Link href={'/dashboard'}>
+          <Link href={'/generate'}>
             <Button sx={{ fontWeight:"bold", fontSize: 24,py:2, px: 4}} variant='contained'>
               Get Started
             </Button>

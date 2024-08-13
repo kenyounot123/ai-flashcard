@@ -44,13 +44,18 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar id="home" sx={{maxWidth:"xl", boxShadow: "none", mx: 'auto'}} position="static" color="secondary">
+    <AppBar
+      id="home"
+      sx={{ maxWidth: "xl", boxShadow: "none", mx: "auto" }}
+      position="static"
+      color="secondary"
+    >
       <Container maxWidth={false}>
         <Toolbar disableGutters>
-          <Link href={'/'} style={{textDecoration: 'none', color: 'inherit' }}>
+          <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>
             <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           </Link>
-          <Link href={'/'} style={{textDecoration: 'none', color: 'inherit' }}>
+          <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>
             <Typography
               variant="h6"
               noWrap
@@ -97,9 +102,21 @@ function ResponsiveAppBar() {
               }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography color="primary" variant="body2" textAlign="center">{page}</Typography>
-                </MenuItem>
+                <Link
+                  key={page}
+                  style={{ textDecoration: "none" }}
+                  href={`/#${page.toLowerCase()}`}
+                >
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography
+                      color="primary"
+                      variant="body2"
+                      textAlign="center"
+                    >
+                      {page}
+                    </Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
@@ -119,9 +136,13 @@ function ResponsiveAppBar() {
           >
             AIFlashPrep
           </Typography>
-          <Box sx={{flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link key={page} style={{ textDecoration: 'none' }} href={`#${page.toLowerCase()}`}>
+              <Link
+                key={page}
+                style={{ textDecoration: "none" }}
+                href={`/#${page.toLowerCase()}`}
+              >
                 <Button
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "primary.main", display: "block" }}
@@ -134,14 +155,28 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <SignedOut>
-              <SignInButton >
-                <Button variant="outlined">
-                  Sign In
-                </Button>
+              <SignInButton>
+                <Button variant="outlined">Sign In</Button>
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <UserButton />
+              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+                {pages.map((page) => (
+                  <Link
+                    key={page}
+                    style={{ textDecoration: "none" }}
+                    href={`/#${page.toLowerCase()}`}
+                  >
+                    <Button
+                      onClick={handleCloseNavMenu}
+                      sx={{ my: 2, color: "primary.main", display: "block" }}
+                    >
+                      {page}
+                    </Button>
+                  </Link>
+                ))}
+                <UserButton />
+              </Box>
             </SignedIn>
           </Box>
         </Toolbar>
