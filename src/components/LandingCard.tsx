@@ -13,7 +13,7 @@ interface LandingCardProps {
 const LandingCard = ({cardColor, content, title, icon, rotate}: LandingCardProps) => {
   return (
     <Stack sx={{rotate: `${rotate}deg`}}>
-      <Stack direction="row">
+      <Stack direction="row" alignItems={"center"}>
         {icon && <Image alt="AI Flashcard" width={50} height={50} src={icon}/>}
         <Typography fontWeight={600} variant='h5'>{title}</Typography>
       </Stack>
@@ -28,7 +28,7 @@ const LandingCard = ({cardColor, content, title, icon, rotate}: LandingCardProps
           p:2  
         }}
       >
-        <Typography variant="body1">{content}</Typography>
+        <Typography sx={{fontSize:20}} variant="body1">{content}</Typography>
       </Box>
     </Stack>
   );

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import localFont from 'next/font/local'
 import { Inter } from "next/font/google"
 import { ThemeProvider } from '@mui/material/styles';
 import "./globals.css";
@@ -9,10 +8,6 @@ import {
 } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 
-const virgil = localFont({
-  src: '../../public/fonts/Virgil.woff2',
-  display: 'swap',
-})
 const inter = Inter({subsets: ["latin"]})
 
 export const metadata: Metadata = {
