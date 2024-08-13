@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <ClerkProvider publishableKey={process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}>
       <html lang="en">  
-        <body className={inter.className} style={{height: '100vh'}}>
+        <body className={inter.className}>
           <ThemeProvider theme={theme}>
             <Navbar />
               <Box sx={{minHeight: "800px"}}>{children}</Box>

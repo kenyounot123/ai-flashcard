@@ -46,7 +46,7 @@ const LandingPage = () => {
           },
         }}
       >
-        <Link href="#home" style={{scrollBehavior: 'smooth'}}>
+        <Link href="#home">
           <Image alt="AI Flashcard" width={100} height={100} src={'/icons/arrowUp.png'} />
         </Link>
       </Box>

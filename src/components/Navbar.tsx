@@ -137,7 +137,9 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>
+            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+          </Link>
           <Typography
             variant="h5"
             noWrap
@@ -151,7 +153,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            AIFlashPrep
+            <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>AIFlashPrep</Link>
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {landing.map((page) => (
