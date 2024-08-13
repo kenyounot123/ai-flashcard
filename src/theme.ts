@@ -19,12 +19,6 @@ const theme = createTheme({
   },
   typography: {
     fontFamily: 'Inter, sans-serif', // Default font for most text
-    h1: {
-      fontFamily: 'Virgil, serif', // Font for h1 headings
-    },
-    h2: {
-      fontFamily: 'Virgil, serif', // Font for h2 headings
-    },
     body1: {
       fontFamily: 'Virgil, serif'
     }

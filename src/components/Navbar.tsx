@@ -16,7 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Product", "Pricing", "Contact"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -43,7 +43,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar sx={{boxShadow: "none"}} position="static" color="secondary">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -58,7 +58,7 @@ function ResponsiveAppBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "primary.main",
               textDecoration: "none",
             }}
           >
@@ -72,7 +72,7 @@ function ResponsiveAppBar() {
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
+              color="primary"
             >
               <MenuIcon />
             </IconButton>
@@ -96,7 +96,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography color="primary" textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -114,7 +114,7 @@ function ResponsiveAppBar() {
               fontFamily: "monospace",
               fontWeight: 700,
               letterSpacing: ".3rem",
-              color: "inherit",
+              color: "primary.main",
               textDecoration: "none",
             }}
           >
@@ -125,7 +125,7 @@ function ResponsiveAppBar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "primary.main", display: "block" }}
               >
                 {page}
               </Button>
@@ -134,7 +134,11 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <SignedOut>
-              <SignInButton />
+              <SignInButton >
+                <Button variant="outlined">
+                  Sign In
+                </Button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
               <UserButton />
