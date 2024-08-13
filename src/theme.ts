@@ -15,6 +15,7 @@ const theme = createTheme({
       accent3: '#F5FAE3', 
       accent4: '#F0C7FF',
       accent5: '#D86DFF',
+      accent6: '#FF5C9F',
     },
   },
   typography: {

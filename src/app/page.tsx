@@ -3,6 +3,7 @@ import { Container, Typography, Button, Stack, Box } from '@mui/material';
 import LandingCard from '@/components/LandingCard';
 import Image from 'next/image';
 import ProductSection from '@/components/ProductSection';
+import PricingSection from '@/components/PricingSection';
 
 const LandingPage = () => {
   return (
@@ -19,13 +20,14 @@ const LandingPage = () => {
           <Button sx={{ fontWeight:"bold", fontSize: 24,py:2, px: 4}} variant='contained'>
             Get Started
           </Button>
-          <Stack sx={{width:"80%", mx:"auto"}} justifyContent="space-between" spacing={7} direction={{ xs: 'column', lg: 'row' }} >
+          <Stack sx={{maxWidth:"80%", mx:"auto"}} justifyContent="space-between" spacing={7} direction={{ xs: 'column', lg: 'row' }} >
             <LandingCard icon={"/icons/pen.svg"} rotate={4.6} title='AI-Generated' cardColor='accent.accent2' content='Automatically creates flashcards using AI technology to help you study more effectively.'/>
             <LandingCard icon={"/icons/lock.svg"} rotate={-1.9} title='Secure User Accounts' cardColor='accent.accent4' content='Save and manage your flashcard sets securely with user accounts.'/>
             <LandingCard icon={"/icons/eraser.png"} rotate={3.09} title='Easy Management' cardColor='accent.accent3' content='Effortlessly create, view, update, and delete your flashcard sets.'/>
           </Stack>
         </Stack>
         <ProductSection />
+        <PricingSection/>
       </Container>
     </>
   );

@@ -8,6 +8,7 @@ declare module '@mui/material/styles' {
       accent3?: string;
       accent4?: string;
       accent5?: string;
+      accent6?: string,
       // Add more accents as needed
     };
   }
@@ -19,6 +20,7 @@ declare module '@mui/material/styles' {
       accent3?: string;
       accent4?: string;
       accent5?: string;
+      accent6?: string,
       // Add more accents as needed
     };
   }

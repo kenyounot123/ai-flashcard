@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar sx={{boxShadow: "none"}} position="static" color="secondary">
+    <AppBar sx={{maxWidth:"xl", boxShadow: "none", mx: 'auto'}} position="static" color="secondary">
       <Container maxWidth={false}>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
@@ -117,9 +117,8 @@ function ResponsiveAppBar() {
           </Typography>
           <Box sx={{flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Link style={{ textDecoration: 'none' }} href={`#${page.toLowerCase()}`}>
+              <Link key={page} style={{ textDecoration: 'none' }} href={`#${page.toLowerCase()}`}>
                 <Button
-                  key={page}
                   onClick={handleCloseNavMenu}
                   sx={{ my: 2, color: "primary.main", display: "block" }}
                 >
