@@ -21,6 +21,9 @@ const theme = createTheme({
     fontFamily: 'Inter, sans-serif', // Default font for most text
     body1: {
       fontFamily: 'Virgil, serif'
+    },
+    body2: {
+      fontFamily: 'Inter, sans-serif'
     }
   },
 });

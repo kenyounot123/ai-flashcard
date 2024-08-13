@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
 
   return (
     <AppBar sx={{boxShadow: "none"}} position="static" color="secondary">
-      <Container maxWidth="xl">
+      <Container maxWidth={false}>
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
@@ -93,7 +93,7 @@ function ResponsiveAppBar() {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography color="primary" textAlign="center">{page}</Typography>
+                  <Typography color="primary" variant="body2" textAlign="center">{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -114,7 +114,7 @@ function ResponsiveAppBar() {
           >
             AIFlashPrep
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+          <Box sx={{flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
