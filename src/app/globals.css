@@ -62,3 +62,7 @@ table {
 body {
 	background-color: #F8F7F5;
 }
+
+html {
+	scroll-behavior: smooth;
+  }

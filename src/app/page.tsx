@@ -10,7 +10,7 @@ import Link from 'next/link';
 const LandingPage = () => {
   return (
     <>
-      <Container sx={{py:{xs: 5, lg: 10}}} maxWidth={false} >
+      <Container sx={{py:{xs: 5, lg: 10}}} maxWidth={false}>
         <Stack sx={{minHeight: "1000px"}} spacing={7} alignItems={"center"}>
           <Typography sx={{textAlign: "center", fontSize: 52, fontWeight: "bold", maxWidth:{lg:"50%"}}} variant='h1'>
             <Image width={100} height={100} alt={'AI Flashcards'} src={'/icons/star.png'}/>

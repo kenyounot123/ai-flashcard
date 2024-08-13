@@ -72,6 +72,7 @@ function ResponsiveAppBar() {
             </Typography>
           </Link>
 
+          {/* Small screen width */}
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -155,6 +156,8 @@ function ResponsiveAppBar() {
           >
             <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>AIFlashPrep</Link>
           </Typography>
+
+          {/* Large screen width */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {landing.map((page) => (
               <Link

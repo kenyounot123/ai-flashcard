@@ -19,45 +19,46 @@ import {
 import { doc, collection, getDoc, writeBatch } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useUser } from "@clerk/clerk-react";
+import { EditableFlashcardGrid } from "./components/EditableFlashcardGrid";
 
-interface Flashcard {
+export interface Flashcard {
   front: string;
   back: string;
 }
 
 const testFlashcards: Flashcard[] = [
-  // {
-  //   front: "What is the capital of France?",
-  //   back: "Paris",
-  // },
-  // {
-  //   front: "What is the capital of Germany?",
-  //   back: "Berlin",
-  // },
-  // {
-  //   front: "What is the capital of Italy?",
-  //   back: "Rome",
-  // },
-  // {
-  //   front: "What is the capital of Spain?",
-  //   back: "Madrid",
-  // },
-  // {
-  //   front: "What is the capital of the United Kingdom?",
-  //   back: "London",
-  // },
-  // {
-  //   front: "What is the capital of the United States?",
-  //   back: "Washington, D.C.",
-  // },
-  // {
-  //   front: "What is the capital of Canada?",
-  //   back: "Ottawa",
-  // },
-  // {
-  //   front: "What is the capital of Mexico?",
-  //   back: "Mexico City",
-  // },
+  {
+    front: "What is the capital of France?",
+    back: "Paris",
+  },
+  {
+    front: "What is the capital of Germany?",
+    back: "Berlin",
+  },
+  {
+    front: "What is the capital of Italy?",
+    back: "Rome",
+  },
+  {
+    front: "What is the capital of Spain?",
+    back: "Madrid",
+  },
+  {
+    front: "What is the capital of the United Kingdom?",
+    back: "London",
+  },
+  {
+    front: "What is the capital of the United States?",
+    back: "Washington, D.C.",
+  },
+  {
+    front: "What is the capital of Canada?",
+    back: "Ottawa",
+  },
+  {
+    front: "What is the capital of Mexico?",
+    back: "Mexico City",
+  },
 ];
 
 export default function Generate() {
@@ -162,42 +163,16 @@ export default function Generate() {
         </Button>
       </Box>
 
-      {flashcards.length > 0 && (
-        <Box sx={{ mt: 4 }}>
-          <Typography variant="h5" component="h2" gutterBottom>
-            Generated Flashcards
-          </Typography>
-          <Grid container spacing={2}>
-            {flashcards.map((flashcard, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <Card
-                  sx={{
-                    minHeight: 200,
-                    backgroundColor:
-                      index % 4 === 0
-                        ? "accent.accent1"
-                        : index % 4 === 1
-                        ? "accent.accent2"
-                        : index % 4 === 2
-                        ? "accent.accent3"
-                        : "accent.accent4",
-                    // rotate: `${Math.floor(Math.random() * 4 - 2)}deg`
-                  }}
-                >
-                  <CardContent>
-                    <Typography variant="h6">Front:</Typography>
-                    <Typography>{flashcard.front}</Typography>
-                    <Typography variant="h6" sx={{ mt: 2 }}>
-                      Back:
-                    </Typography>
-                    <Typography>{flashcard.back}</Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-      )}
+      <Box sx={{ mt: 4 }}>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Generated Flashcards
+        </Typography>
+        <EditableFlashcardGrid
+          flashcards={flashcards}
+          setFlashcards={setFlashcards}
+        />
+      </Box>
+
       {flashcards.length > 0 && (
         <Box sx={{ mt: 4, display: "flex", justifyContent: "center" }}>
           <Button
