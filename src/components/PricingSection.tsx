@@ -8,7 +8,7 @@ export default function PricingSection() {
         <Typography sx={{fontSize: '3rem'}} variant="h1">Pick Your Plan</Typography>
         <Typography sx={{fontSize: '2rem'}} variant="h4">Choose the plan that <Box component='span' sx={{color: 'accent.accent6'}}>best fits</Box> your learning needs</Typography>
       </Box>
-      <Stack mt={7} direction={{md: 'row'}} spacing={7} justifyContent={'center'}>
+      <Stack mt={7} direction={{md: 'row'}} gap={5} spacing={7} justifyContent={'center'}>
         <Paper sx={{
           width: '400px',
           height: '531px',
