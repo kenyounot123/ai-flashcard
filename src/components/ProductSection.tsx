@@ -9,7 +9,7 @@ export default function ProductSection() {
           <Typography sx={{fontSize: 52, fontWeight: "bold"}} variant="h1">Simple.</Typography>
           <Typography sx={{fontSize: 52, fontWeight: "bold"}} variant="h1">Easy To Use.</Typography>
           <Typography sx={{fontSize: 52, fontWeight: "bold"}} variant="h1">Effortless.</Typography>
-          <Typography sx={{fontSize: 24, my:5}} variant="body2">Provide a prompt, and let AI generate personalized flashcards for you. Save these flashcards as study sets if you're logged in, and easily create, edit, update, or delete cards to fit your needs. </Typography>
+          <Typography sx={{fontSize: 24, my:5}} variant="body2">Provide a prompt, and let AI generate personalized flashcards for you. Save these flashcards as study sets if you&apos;re logged in, and easily create, edit, update, or delete cards to fit your needs. </Typography>
           <Button sx={{ textWrap: 'nowrap', width:"min-content", fontWeight:"bold", fontSize: 24, py:1, px: 2}} variant="contained">
             Get Started
           </Button>
