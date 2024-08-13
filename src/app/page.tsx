@@ -19,9 +19,11 @@ const LandingPage = () => {
           <Typography sx={{fontSize: 24, textAlign:"center", maxWidth:{lg:"40%"}}} variant='h4'>
             <Box component={'span'} color={"accent.accent5"}>AI-generated flashcards </Box>that adapt to your needs and help you retain information <Box component={'span'} color={"accent.accent5"}>more effectively</Box>
           </Typography>
-          <Button sx={{ fontWeight:"bold", fontSize: 24,py:2, px: 4}} variant='contained'>
-            Get Started
-          </Button>
+          <Link href={'/dashboard'}>
+            <Button sx={{ fontWeight:"bold", fontSize: 24,py:2, px: 4}} variant='contained'>
+              Get Started
+            </Button>
+          </Link>
           <Stack sx={{maxWidth:"80%", mx:"auto"}} justifyContent="space-between" spacing={7} direction={{ xs: 'column', lg: 'row' }} >
             <LandingCard icon={"/icons/pen.svg"} rotate={4.6} title='AI-Generated' cardColor='accent.accent2' content='Automatically creates flashcards using AI technology to help you study more effectively.'/>
             <LandingCard icon={"/icons/lock.svg"} rotate={-1.9} title='Secure User Accounts' cardColor='accent.accent4' content='Save and manage your flashcard sets securely with user accounts.'/>
@@ -38,6 +40,10 @@ const LandingPage = () => {
           bottom: 16,
           right: 16,
           zIndex: 1000, 
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.1)', // Slightly enlarges the button
+          },
         }}
       >
         <Link href="#home" style={{scrollBehavior: 'smooth'}}>

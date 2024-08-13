@@ -1,4 +1,5 @@
 import { Box, Typography, Stack, Paper, Button } from "@mui/material";
+import Flashcard from "./Flashcard";
 
 export default function ProductSection() {
   return (
@@ -14,75 +15,34 @@ export default function ProductSection() {
           </Button>
         </Stack>
         <Box sx={{minWidth:'30%', display: 'flex', flexDirection: 'column', gap:5}}>
-          <Paper
-            square
-            elevation={3}
-            sx={{
-              minWidth: '308px',
-              minHeight: '109.7px',
-              maxWidth: '444.93px',
-              maxHeight: '131px',
-              rotate: '1.14deg',
-              backgroundColor: 'accent.accent2',
-              p:2}} >
-                <Stack mb={2} direction={'row'} justifyContent={'space-between'}>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>Create a new study set</Typography>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>01</Typography>
-                </Stack>
-                <Typography>Enter a title and prompt, then click "Create" to start a new study set.</Typography>
-          </Paper>
-          <Paper
-            square
-            elevation={3}
-            sx={{
-              minWidth: '308px',
-              minHeight: '109.7px',
-              maxWidth: '444.93px',
-              maxHeight: '131px',
-              rotate: '-2.25deg',
-              backgroundColor: 'accent.accent1',
-              p:2}} >
-                <Stack mb={2} direction={'row'} justifyContent={'space-between'}>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>Generate Flashcards</Typography>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>02</Typography>
-                </Stack>
-                <Typography>Provide a topic to generate AI-powered flashcards instantly.</Typography>
-          </Paper>
-          <Paper
-            square
-            elevation={3}
-            sx={{
-              minWidth: '308px',
-              minHeight: '109.7px',
-              maxWidth: '444.93px',
-              maxHeight: '131px',
-              rotate: '3.18deg',
-              backgroundColor: 'accent.accent3',
-              p:2}} >
-                <Stack mb={2} direction={'row'} justifyContent={'space-between'}>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>Review and Edit</Typography>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>03</Typography>
-                </Stack>
-                <Typography>Review the flashcards and make any edits as needed.</Typography>
-          </Paper>
-          <Paper
-            square
-            elevation={3}
-            sx={{
-              minWidth: '308px',
-              minHeight: '109.7px',
-              maxWidth: '444.93px',
-              maxHeight: '131px',
-              rotate: '-4.47deg',
-              backgroundColor: 'accent.accent4',
-              p:2}} >
-                <Stack mb={2} direction={'row'} justifyContent={'space-between'}>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>Save the Study Set</Typography>
-                  <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>04</Typography>
-                </Stack>
-                <Typography> Save your finalized study set to your account.</Typography>
-          </Paper>
-          
+          <Flashcard
+            rotate="1.14"
+            cardColor="accent.accent2"
+            title="Create a new study set"
+            date="01"
+            content="Enter a title and prompt, then click 'Create' to start a new study set."
+          />
+          <Flashcard
+            rotate="-2.25"
+            cardColor="accent.accent1"
+            title="Generate Flashcards"
+            date="02"
+            content="Provide a topic to generate AI-powered flashcards instantly."
+          />
+          <Flashcard
+            rotate="3.18"
+            cardColor="accent.accent3"
+            title="Review and Edit"
+            date="03"
+            content="Review the flashcards and make any edits as needed."
+          />
+          <Flashcard
+            rotate="-4.47"
+            cardColor="accent.accent4"
+            title="Save the Study Set"
+            date="04"
+            content="Save your finalized study set to your account."
+          />
         </Box>
       </Stack>
     </Box>

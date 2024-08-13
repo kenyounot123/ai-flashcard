@@ -17,7 +17,7 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-const pages = ["Product", "Pricing", "Contact"];
+const pages = ["Product", "Pricing"];
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
@@ -47,21 +47,25 @@ function ResponsiveAppBar() {
     <AppBar id="home" sx={{maxWidth:"xl", boxShadow: "none", mx: 'auto'}} position="static" color="secondary">
       <Container maxWidth={false}>
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "primary.main",
-              textDecoration: "none",
-            }}
-          >
-            AIFlashPrep
-          </Typography>
+          <Link href={'/'} style={{textDecoration: 'none', color: 'inherit' }}>
+            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+          </Link>
+          <Link href={'/'} style={{textDecoration: 'none', color: 'inherit' }}>
+            <Typography
+              variant="h6"
+              noWrap
+              sx={{
+                mr: 2,
+                display: { xs: "none", md: "flex" },
+                fontWeight: 700,
+                letterSpacing: ".3rem",
+                color: "primary.main",
+                textDecoration: "none",
+              }}
+            >
+              AIFlashPrep
+            </Typography>
+          </Link>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
