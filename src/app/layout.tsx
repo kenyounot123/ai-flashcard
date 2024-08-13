@@ -8,6 +8,7 @@ import {
 } from "@clerk/nextjs";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { Box } from "@mui/material";
 
 const inter = Inter({subsets: ["latin"]})
 
@@ -27,7 +28,7 @@ export default function RootLayout({
         <body className={inter.className} style={{height: '100vh'}}>
           <ThemeProvider theme={theme}>
             <Navbar />
-            {children}
+              <Box sx={{minHeight: "800px"}}>{children}</Box>
             <Footer />
           </ThemeProvider>
         </body>
