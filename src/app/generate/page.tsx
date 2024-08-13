@@ -22,38 +22,38 @@ import { useUser } from "@clerk/clerk-react";
 
 const testFlashcards = {
   flashcards: [
-    {
-      front: "What is the capital of France?",
-      back: "Paris",
-    },
-    {
-      front: "What is the capital of Germany?",
-      back: "Berlin",
-    },
-    {
-      front: "What is the capital of Italy?",
-      back: "Rome",
-    },
-    {
-      front: "What is the capital of Spain?",
-      back: "Madrid",
-    },
-    {
-      front: "What is the capital of the United Kingdom?",
-      back: "London",
-    },
-    {
-      front: "What is the capital of the United States?",
-      back: "Washington, D.C.",
-    },
-    {
-      front: "What is the capital of Canada?",
-      back: "Ottawa",
-    },
-    {
-      front: "What is the capital of Mexico?",
-      back: "Mexico City",
-    },
+    // {
+    //   front: "What is the capital of France?",
+    //   back: "Paris",
+    // },
+    // {
+    //   front: "What is the capital of Germany?",
+    //   back: "Berlin",
+    // },
+    // {
+    //   front: "What is the capital of Italy?",
+    //   back: "Rome",
+    // },
+    // {
+    //   front: "What is the capital of Spain?",
+    //   back: "Madrid",
+    // },
+    // {
+    //   front: "What is the capital of the United Kingdom?",
+    //   back: "London",
+    // },
+    // {
+    //   front: "What is the capital of the United States?",
+    //   back: "Washington, D.C.",
+    // },
+    // {
+    //   front: "What is the capital of Canada?",
+    //   back: "Ottawa",
+    // },
+    // {
+    //   front: "What is the capital of Mexico?",
+    //   back: "Mexico City",
+    // },
   ],
 };
 
@@ -61,13 +61,14 @@ export default function Generate() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [text, setText] = useState("");
   const [flashcards, setFlashcards] = useState(testFlashcards.flashcards);
-  const [setName, setSetName] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const handleOpenDialog = () => setDialogOpen(true);
   const handleCloseDialog = () => setDialogOpen(false);
 
   const saveFlashcards = async () => {
-    if (!setName.trim()) {
+    if (!name.trim()) {
       alert("Please enter a name for your flashcard set.");
       return;
     }
@@ -83,21 +84,22 @@ export default function Generate() {
         const userData = userDocSnap.data();
         const updatedSets = [
           ...(userData.flashcardSets || []),
-          { name: setName },
+          { name: name },
         ];
         batch.update(userDocRef, { flashcardSets: updatedSets });
       } else {
-        batch.set(userDocRef, { flashcardSets: [{ name: setName }] });
+        batch.set(userDocRef, { flashcardSets: [{ name: name, description: description }] });
       }
 
-      const setDocRef = doc(collection(userDocRef, "flashcardSets"), setName);
+      const setDocRef = doc(collection(userDocRef, "flashcardSets"), name);
       batch.set(setDocRef, { flashcards });
 
       await batch.commit();
 
       alert("Flashcards saved successfully!");
       handleCloseDialog();
-      setSetName("");
+      setName("");
+      setDescription("");
     } catch (error) {
       console.error("Error saving flashcards:", error);
       alert("An error occurred while saving flashcards. Please try again.");
@@ -173,6 +175,7 @@ export default function Generate() {
                         : index % 4 === 2
                         ? "accent.accent3"
                         : "accent.accent4",
+                    // rotate: `${Math.floor(Math.random() * 4 - 2)}deg`
                   }}
                 >
                   <CardContent>
@@ -204,16 +207,25 @@ export default function Generate() {
         <DialogTitle>Save Flashcard Set</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Please enter a name for your flashcard set.
+            Please enter a name and a description for your flashcard set.
           </DialogContentText>
           <TextField
             autoFocus
             margin="dense"
-            label="Set Name"
+            label="Title"
             type="text"
             fullWidth
-            value={setName}
-            onChange={(e) => setSetName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Description"
+            type="text"
+            fullWidth
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
           />
         </DialogContent>
         <DialogActions>
