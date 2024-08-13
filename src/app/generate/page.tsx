@@ -20,47 +20,50 @@ import { doc, collection, getDoc, writeBatch } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useUser } from "@clerk/clerk-react";
 
-const testFlashcards = {
-  flashcards: [
-    // {
-    //   front: "What is the capital of France?",
-    //   back: "Paris",
-    // },
-    // {
-    //   front: "What is the capital of Germany?",
-    //   back: "Berlin",
-    // },
-    // {
-    //   front: "What is the capital of Italy?",
-    //   back: "Rome",
-    // },
-    // {
-    //   front: "What is the capital of Spain?",
-    //   back: "Madrid",
-    // },
-    // {
-    //   front: "What is the capital of the United Kingdom?",
-    //   back: "London",
-    // },
-    // {
-    //   front: "What is the capital of the United States?",
-    //   back: "Washington, D.C.",
-    // },
-    // {
-    //   front: "What is the capital of Canada?",
-    //   back: "Ottawa",
-    // },
-    // {
-    //   front: "What is the capital of Mexico?",
-    //   back: "Mexico City",
-    // },
-  ],
-};
+interface Flashcard {
+  front: string;
+  back: string;
+}
+
+const testFlashcards: Flashcard[] = [
+  // {
+  //   front: "What is the capital of France?",
+  //   back: "Paris",
+  // },
+  // {
+  //   front: "What is the capital of Germany?",
+  //   back: "Berlin",
+  // },
+  // {
+  //   front: "What is the capital of Italy?",
+  //   back: "Rome",
+  // },
+  // {
+  //   front: "What is the capital of Spain?",
+  //   back: "Madrid",
+  // },
+  // {
+  //   front: "What is the capital of the United Kingdom?",
+  //   back: "London",
+  // },
+  // {
+  //   front: "What is the capital of the United States?",
+  //   back: "Washington, D.C.",
+  // },
+  // {
+  //   front: "What is the capital of Canada?",
+  //   back: "Ottawa",
+  // },
+  // {
+  //   front: "What is the capital of Mexico?",
+  //   back: "Mexico City",
+  // },
+];
 
 export default function Generate() {
   const { isLoaded, isSignedIn, user } = useUser();
   const [text, setText] = useState("");
-  const [flashcards, setFlashcards] = useState(testFlashcards.flashcards);
+  const [flashcards, setFlashcards] = useState(testFlashcards);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -74,6 +77,10 @@ export default function Generate() {
     }
 
     try {
+      if (!user) {
+        alert("Please sign in to save flashcards.");
+        return;
+      }
       const userDocRef = doc(collection(db, "users"), user.id);
       console.log(userDocRef);
       const userDocSnap = await getDoc(userDocRef);
@@ -82,13 +89,12 @@ export default function Generate() {
 
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
-        const updatedSets = [
-          ...(userData.flashcardSets || []),
-          { name: name },
-        ];
+        const updatedSets = [...(userData.flashcardSets || []), { name: name }];
         batch.update(userDocRef, { flashcardSets: updatedSets });
       } else {
-        batch.set(userDocRef, { flashcardSets: [{ name: name, description: description }] });
+        batch.set(userDocRef, {
+          flashcardSets: [{ name: name, description: description }],
+        });
       }
 
       const setDocRef = doc(collection(userDocRef, "flashcardSets"), name);

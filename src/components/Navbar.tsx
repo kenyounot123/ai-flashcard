@@ -17,8 +17,8 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
-const pages = ["Product", "Pricing"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const landing = ["Product", "Pricing"];
+const pages = ["Dashboard", "Generate"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
@@ -101,11 +101,28 @@ function ResponsiveAppBar() {
                 display: { xs: "block", md: "none" },
               }}
             >
-              {pages.map((page) => (
+              {landing.map((page) => (
                 <Link
                   key={page}
                   style={{ textDecoration: "none" }}
                   href={`/#${page.toLowerCase()}`}
+                >
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography
+                      color="primary"
+                      variant="body2"
+                      textAlign="center"
+                    >
+                      {page}
+                    </Typography>
+                  </MenuItem>
+                </Link>
+              ))}
+              {pages.map((page) => (
+                <Link
+                  key={page}
+                  style={{ textDecoration: "none" }}
+                  href={`/${page.toLowerCase()}`}
                 >
                   <MenuItem key={page} onClick={handleCloseNavMenu}>
                     <Typography
@@ -137,11 +154,25 @@ function ResponsiveAppBar() {
             AIFlashPrep
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
+            {landing.map((page) => (
               <Link
                 key={page}
                 style={{ textDecoration: "none" }}
                 href={`/#${page.toLowerCase()}`}
+              >
+                <Button
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "primary.main", display: "block" }}
+                >
+                  {page}
+                </Button>
+              </Link>
+            ))}
+            {pages.map((page) => (
+              <Link
+                key={page}
+                style={{ textDecoration: "none" }}
+                href={`/${page.toLowerCase()}`}
               >
                 <Button
                   onClick={handleCloseNavMenu}
@@ -160,23 +191,7 @@ function ResponsiveAppBar() {
               </SignInButton>
             </SignedOut>
             <SignedIn>
-              <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-                {pages.map((page) => (
-                  <Link
-                    key={page}
-                    style={{ textDecoration: "none" }}
-                    href={`/#${page.toLowerCase()}`}
-                  >
-                    <Button
-                      onClick={handleCloseNavMenu}
-                      sx={{ my: 2, color: "primary.main", display: "block" }}
-                    >
-                      {page}
-                    </Button>
-                  </Link>
-                ))}
-                <UserButton />
-              </Box>
+              <UserButton />
             </SignedIn>
           </Box>
         </Toolbar>

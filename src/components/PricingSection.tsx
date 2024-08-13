@@ -60,7 +60,7 @@ export default function PricingSection() {
         elevation={5}>
           <Stack mt={5} alignItems={'center'}>
             <Typography sx={{fontSize:'2rem'}} variant="h1">Pro</Typography>
-            <Typography sx={{fontWeight: 'bold'}} variant="h1">$4.99</Typography>
+            <Typography sx={{fontWeight: 'bold'}} variant="h1">$1.99</Typography>
             <Typography sx={{fontSize:'1.5rem'}} variant="h2">One time payment</Typography>
             <Stack width={'80%'} justifyContent={'space-between'} mt={5} direction={'row'} alignItems={'center'}>
               <Box>
