@@ -41,13 +41,16 @@ export default async function Dashboard() {
       <Grid mt={2} container spacing={2}>
         {studySets.map((set) => (
           <Grid item xs={12} sm={6} md={4} key={set.id}>
-            <Flashcard
-              title={set.title}
-              date={set.date}
-              content={set.content}
-              rotate={`${Math.random() * 4 - 2}`}
-              cardColor={`accent.accent${Math.floor(Math.random() * 4) + 1}`}
-            />
+            <Link href={`/dashboard/study_set/${set.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+              <Flashcard
+                hover={true}
+                title={set.title}
+                date={set.date}
+                content={set.content}
+                rotate={`${Math.random() * 4 - 2}`}
+                cardColor={`accent.accent${Math.floor(Math.random() * 4) + 1}`}
+              />
+            </Link>
           </Grid>
         ))}
       </Grid>
