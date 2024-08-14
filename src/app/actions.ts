@@ -10,24 +10,26 @@ import {
   where,
   doc,
   writeBatch,
+  runTransaction,
 } from "firebase/firestore";
+import { auth } from "@clerk/nextjs/server";
 
 export async function createFlashcardSet(
-  uid: string,
   name: string,
   flashcards: Flashcard[],
   description?: string
 ): Promise<FlashcardSet> {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User is not signed in");
+  }
   if (!name.trim()) {
     throw new Error("Flashcard set name cannot be empty");
   }
 
-  if (!uid) {
-    throw new Error("User is not signed in");
-  }
-
   try {
-    const userDocRef = doc(collection(db, "users"), uid);
+    const userDocRef = doc(collection(db, "users"), userId);
     const userDocSnap = await getDoc(userDocRef);
 
     const batch = writeBatch(db);
@@ -58,12 +60,15 @@ export async function createFlashcardSet(
 }
 
 // Reads all flashcard sets for a user
-export async function readFlashcardSets(uid: string): Promise<FlashcardSet[]> {
-  if (!uid) {
+export async function readFlashcardSets(): Promise<FlashcardSet[]> {
+  const { userId } = auth();
+  console.log(userId);
+
+  if (!userId) {
     throw new Error("User is not signed in");
   }
 
-  const userDocRef = doc(collection(db, "users"), uid);
+  const userDocRef = doc(collection(db, "users"), userId);
   const flashcardSetsRef = collection(userDocRef, "flashcardSets");
   const flashcardSetsQuery = query(flashcardSetsRef);
 
@@ -78,22 +83,22 @@ export async function readFlashcardSets(uid: string): Promise<FlashcardSet[]> {
 }
 
 export async function updateFlashcardSet(
-  uid: string,
   name: string,
   newName?: string,
   description?: string,
   flashcards?: Flashcard[]
 ): Promise<FlashcardSet> {
+  const { userId } = auth();
+
+  if (!userId) {
+    throw new Error("User is not signed in");
+  }
   if (!name.trim()) {
     throw new Error("Flashcard set name cannot be empty");
   }
 
-  if (!uid) {
-    throw new Error("User is not signed in");
-  }
-
   // get the user document based on id
-  const userDocRef = doc(collection(db, "users"), uid);
+  const userDocRef = doc(collection(db, "users"), userId);
   const userDocSnap = await getDoc(userDocRef);
   if (!userDocSnap.exists()) {
     throw new Error("User document does not exist");
@@ -118,20 +123,18 @@ export async function updateFlashcardSet(
   return updatedFlashcardSet;
 }
 
-export async function deleteFlashcardSet(
-  uid: string,
-  setId: string
-): Promise<void> {
+export async function deleteFlashcardSet(setId: string): Promise<void> {
+  const { userId } = auth();
   if (!setId.trim()) {
     throw new Error("Cannot delete flashcard set with empty id");
   }
 
-  if (!uid) {
+  if (!userId) {
     throw new Error("User is not signed in");
   }
 
   // get the user document based on id
-  const userDocRef = doc(collection(db, "users"), uid);
+  const userDocRef = doc(collection(db, "users"), userId);
   const userDocSnap = await getDoc(userDocRef);
   if (!userDocSnap.exists()) {
     throw new Error("User document does not exist");
@@ -148,4 +151,54 @@ export async function deleteFlashcardSet(
   const batch = writeBatch(db);
   batch.delete(setDocRef);
   await batch.commit();
+}
+
+export async function limitFreeUsage(usage: number, action: string) {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error("User is not signed in");
+  }
+  const userDocRef = doc(collection(db, "users"), userId);
+
+  const userDoc = await runTransaction(db, async (transaction) => {
+    const userDocSnap = await transaction.get(userDocRef);
+
+    if (!userDocSnap.exists()) {
+      throw new Error("User document does not exist");
+    }
+
+    const userData = userDocSnap.data();
+
+    if (userData.subscription !== "free") {
+      return null; // Exit early if not on free plan
+    }
+
+    let actionUsage = userData.actionUsage || {};
+    let currentUsage = actionUsage[action] || 0;
+
+    if (currentUsage >= usage) {
+      throw new Error("Free plan limit reached");
+    }
+
+    // Increment usage
+    actionUsage = {
+      ...actionUsage,
+      [action]: currentUsage + 1,
+    };
+
+    transaction.update(userDocRef, { actionUsage });
+
+    return { ...userData, actionUsage };
+  });
+
+  return userDoc;
+}
+
+export async function limitedCreateFlashcardSet(
+  name: string,
+  flashcards: Flashcard[],
+  description?: string
+): Promise<FlashcardSet> {
+  await limitFreeUsage(5, "createFlashcardSet");
+  return await createFlashcardSet(name, flashcards, description);
 }

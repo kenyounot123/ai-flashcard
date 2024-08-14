@@ -19,6 +19,7 @@ import {
   readFlashcardSets,
   updateFlashcardSet,
   deleteFlashcardSet,
+  limitedCreateFlashcardSet
 } from "@/app/actions";
 import { Flashcard, FlashcardSet } from "@/types";
 
@@ -41,7 +42,7 @@ export default function TestRoute() {
   console.log(mostRecentSet);
 
   function handleCreateSet() {
-    createFlashcardSet(
+    limitedCreateFlashcardSet(
       TEST_USER,
       TEST_SET_NAME,
       TEST_FLASHCARDS,
