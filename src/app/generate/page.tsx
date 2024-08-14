@@ -7,9 +7,6 @@ import {
   Button,
   Typography,
   Box,
-  Grid,
-  Card,
-  CardContent,
   Dialog,
   DialogTitle,
   DialogContent,
@@ -20,11 +17,7 @@ import { doc, collection, getDoc, writeBatch } from "firebase/firestore";
 import { db } from "@/firebase";
 import { useUser } from "@clerk/clerk-react";
 import { EditableFlashcardGrid } from "./components/EditableFlashcardGrid";
-
-export interface Flashcard {
-  front: string;
-  back: string;
-}
+import { Flashcard } from "@/types";
 
 const testFlashcards: Flashcard[] = [
   {

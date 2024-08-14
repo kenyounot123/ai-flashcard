@@ -1,6 +1,5 @@
 import { useState, useRef, useEffect } from "react";
 import {
-  Container,
   TextField,
   Button,
   Typography,
@@ -8,19 +7,11 @@ import {
   Grid,
   Card,
   CardContent,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from "@mui/material";
-import { doc, collection, getDoc, writeBatch } from "firebase/firestore";
-import { db } from "@/firebase";
-import { useUser } from "@clerk/clerk-react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import SaveIcon from "@mui/icons-material/Save";
-import { Flashcard } from "../page";
+import { Flashcard } from "@/types";
 
 export function EditableFlashcardGrid({
   flashcards,
@@ -33,16 +24,13 @@ export function EditableFlashcardGrid({
   const frontTextFieldRef = useRef<HTMLTextAreaElement>(null);
   const backTextFieldRef = useRef<HTMLTextAreaElement>(null);
 
-  // Edit flashcards
-  const editFlashcard = (index: number, field: string, value: string) => {
+  const saveEdits = (index: number, flashcard: Flashcard) => {
     setFlashcards([
       ...flashcards.slice(0, index),
-      {
-        ...flashcards[index],
-        [field]: value,
-      },
+      flashcard,
       ...flashcards.slice(index + 1),
     ]);
+    setEditingIndex(null);
   };
 
   // Handle keydown events for tab and enter
@@ -61,7 +49,10 @@ export function EditableFlashcardGrid({
       }
     }
     if (event.key === "Enter") {
-      setEditingIndex(null);
+      saveEdits(editingIndex as number, {
+        front: frontTextFieldRef.current?.value as string,
+        back: backTextFieldRef.current?.value as string,
+      });
     }
   };
 
@@ -107,10 +98,7 @@ export function EditableFlashcardGrid({
               {editingIndex === index ? (
                 <TextField
                   multiline
-                  value={flashcards[index]?.front}
-                  onChange={(e) =>
-                    editFlashcard(index, "front", e.target.value)
-                  }
+                  defaultValue={flashcard.front}
                   fullWidth
                   inputRef={frontTextFieldRef}
                   onKeyDown={handleKeyDown}
@@ -125,8 +113,7 @@ export function EditableFlashcardGrid({
               {editingIndex === index ? (
                 <TextField
                   multiline
-                  value={flashcards[index]?.back}
-                  onChange={(e) => editFlashcard(index, "back", e.target.value)}
+                  defaultValue={flashcard.back}
                   fullWidth
                   inputRef={backTextFieldRef}
                   onKeyDown={handleKeyDown}
@@ -142,7 +129,7 @@ export function EditableFlashcardGrid({
                   justifyContent: "space-between",
                 }}
               >
-                <DeleteIcon
+                <Button
                   sx={{
                     transition: "color 0.1s ease",
                     "&:hover": {
@@ -156,9 +143,17 @@ export function EditableFlashcardGrid({
                       ...flashcards.slice(index + 1),
                     ])
                   }
-                />
+                >
+                  <DeleteIcon />
+                </Button>
                 {editingIndex === index ? (
-                  <SaveIcon
+                  <Button
+                    onClick={() =>
+                      saveEdits(index, {
+                        front: frontTextFieldRef.current?.value as string,
+                        back: backTextFieldRef.current?.value as string,
+                      })
+                    }
                     sx={{
                       transition: "color 0.3s ease",
                       "&:hover": {
@@ -166,10 +161,14 @@ export function EditableFlashcardGrid({
                         color: "accent.accent6",
                       },
                     }}
-                    onClick={() => setEditingIndex(null)}
-                  />
+                  >
+                    <SaveIcon />
+                  </Button>
                 ) : (
-                  <EditIcon
+                  <Button
+                    onClick={() => {
+                      setEditingIndex(index);
+                    }}
                     sx={{
                       transition: "color 0.3s ease",
                       "&:hover": {
@@ -177,11 +176,9 @@ export function EditableFlashcardGrid({
                         color: "accent.accent6",
                       },
                     }}
-                    onClick={() => {
-                        setEditingIndex(index)
-                        
-                    }}
-                  />
+                  >
+                    <EditIcon />
+                  </Button>
                 )}
               </Box>
             </CardContent>
