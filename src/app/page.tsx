@@ -1,95 +1,57 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client'
+import React from 'react';
+import { Container, Typography, Button, Stack, Box } from '@mui/material';
+import LandingCard from '@/components/LandingCard';
+import Image from 'next/image';
+import ProductSection from '@/components/ProductSection';
+import PricingSection from '@/components/PricingSection';
+import Link from 'next/link';
 
-export default function Home() {
+const LandingPage = () => {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <>
+      <Container sx={{py:{xs: 5, lg: 10}}} maxWidth={false}>
+        <Stack sx={{minHeight: "1000px"}} spacing={7} alignItems={"center"}>
+          <Typography sx={{textAlign: "center", fontSize: 52, fontWeight: "bold", maxWidth:{lg:"50%"}}} variant='h1'>
+            <Image width={100} height={100} alt={'AI Flashcards'} src={'/icons/star.png'}/>
+            Transform Your Learning with AI-Powered Flashcards
+          </Typography>
+          <Typography sx={{fontSize: 24, textAlign:"center", maxWidth:{lg:"40%"}}} variant='h4'>
+            <Box component={'span'} color={"accent.accent5"}>AI-generated flashcards </Box>that adapt to your needs and help you retain information <Box component={'span'} color={"accent.accent5"}>more effectively</Box>
+          </Typography>
+          <Link href={'/generate'}>
+            <Button sx={{ fontWeight:"bold", fontSize: 24,py:2, px: 4}} variant='contained'>
+              Get Started
+            </Button>
+          </Link>
+          <Stack sx={{maxWidth:"80%", mx:"auto"}} justifyContent="space-between" spacing={7} direction={{ xs: 'column', lg: 'row' }} >
+            <LandingCard icon={"/icons/pen.svg"} rotate={4.6} title='AI-Generated' cardColor='accent.accent2' content='Automatically creates flashcards using AI technology to help you study more effectively.'/>
+            <LandingCard icon={"/icons/lock.svg"} rotate={-1.9} title='Secure User Accounts' cardColor='accent.accent4' content='Save and manage your flashcard sets securely with user accounts.'/>
+            <LandingCard icon={"/icons/eraser.png"} rotate={3.09} title='Easy Management' cardColor='accent.accent3' content='Effortlessly create, view, update, and delete your flashcard sets.'/>
+          </Stack>
+        </Stack>
+        <ProductSection />
+        <PricingSection/>
+      </Container>
+      <Box
+        component="aside"
+        sx={{
+          position: 'fixed',
+          bottom: 16,
+          right: 16,
+          zIndex: 1000, 
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          '&:hover': {
+            transform: 'scale(1.1)', // Slightly enlarges the button
+          },
+        }}
+      >
+        <Link href="#home">
+          <Image alt="AI Flashcard" width={100} height={100} src={'/icons/arrowUp.png'} />
+        </Link>
+      </Box>
+    </>
   );
-}
+};
+
+export default LandingPage;
