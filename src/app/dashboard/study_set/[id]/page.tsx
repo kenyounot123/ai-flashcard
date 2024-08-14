@@ -1,9 +1,10 @@
 'use client'
-import { Typography, Container, Paper, Stack, Box } from "@mui/material";
+import { Typography, Container, Paper, Stack, Box, Button } from "@mui/material";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
-import { useState } from "react";
-
+import { useState, useRef, useMemo, createRef } from "react";
+import StudySetFlashCard from "./StudySetFlashCard";
+import TinderCard from 'react-tinder-card'
 // This will use a study set object instead
 const studySetFlashcards = [
   {
@@ -37,44 +38,68 @@ const studySetFlashcards = [
 ]
 export default function StudySet({params}: { params: {id: string} }) {
   // fetch the study set from database and return its flashcards
-  const [cardIndex, setCardIndex] = useState(0)
-  const [correct, setCorrect] = useState(null)
+  const [currentIndex, setCurrentIndex] = useState<number>(studySetFlashcards.length - 1)
+  const [lastDirection, setLastDirection] = useState<string | undefined>()
+  const currentIndexRef = useRef<number>(currentIndex)
 
-  const handlePrev = () => {
-    setCardIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-  };
+  const childRefs = useMemo(
+    () =>
+      Array(studySetFlashcards.length)
+        .fill(0)
+        .map((i) => createRef<any>()),
+    []
+  )
+  const updateCurrentIndex = (val: number) => {
+    setCurrentIndex(val)
+    currentIndexRef.current = val
+  }
 
-  const handleNext = () => {
-    setCardIndex((prevIndex) => Math.min(prevIndex + 1, studySetFlashcards.length - 1));
-  };
+  const canGoBack = currentIndex < studySetFlashcards.length - 1
 
-  const currentCard = studySetFlashcards[cardIndex];
+  const canSwipe = currentIndex >= 0
+
+  const swiped = (direction: string, nameToDelete: string, index: number) => {
+    // Logic goes here
+    setLastDirection(direction)
+    updateCurrentIndex(index - 1)
+  }
+
+  const outOfFrame = (name: string, idx: number) => {
+    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current)
+    // handle the case in which go back is pressed before card goes outOfFrame
+    currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
+  }
+  const swipe = async (dir: 'left' | 'right') => {
+    if (canSwipe && currentIndex < studySetFlashcards.length) {
+      await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
+    }
+  }
+  const goBack = async () => {
+    if (!canGoBack) return
+    const newIndex = currentIndex + 1
+    updateCurrentIndex(newIndex)
+    await childRefs[newIndex].current.restoreCard()
+  }
   return (
     <>
-      <Container sx={{mt:5, py:5, maxWidth:"xl"}} maxWidth={false}>
-        <Box sx={{maxWidth:"700px", mx: "auto"}}>
-          <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>Study set Title</Typography>
-          <Paper
-            sx={{
-              backgroundColor: currentCard.color,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "100%",
-              maxWidth: "700px",
-              minHeight: "500px",
-              transition: 'transform 0.5s ease-in-out',
-              transform: correct !== null ? `translateX(${correct ? '100%' : '-100%'})` : 'none',
-            }}
-            elevation={2}
-          >
-            <Typography sx={{ fontSize: 32, textAlign: "center" }} variant="body1">
-              {currentCard.front}
-            </Typography>
-          </Paper>
+      <Container sx={{mt:5, py:5, maxWidth:"xl", overflow: 'hidden'}} maxWidth={false}>
+        <Box sx={{maxWidth:"700px", mx: "auto",}}>
           <Stack direction={'row'} justifyContent={'space-between'}>
+            <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>Study set Title</Typography>
+            <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>{currentIndex}/ {studySetFlashcards.length}</Typography>
+          </Stack>
+          <Box sx={{ width: '100%',
+              maxWidth: '700px',
+              minHeight: '500px', position: 'relative'}}>
+            {studySetFlashcards.map((card, index) => (
+              <TinderCard ref={childRefs[index]} className="flashcard" key={card.id} preventSwipe={['up', 'down']} onSwipe={(dir) => swiped(dir, card.title, index)} onCardLeftScreen={() => outOfFrame(card.title, index)}>
+                <StudySetFlashCard card={card}/>
+              </TinderCard>
+            ))}
+          </Box>
+          <Stack sx={{}} direction={'row'} justifyContent={'space-between'}>
             <WestIcon
-              onClick={handlePrev}
+              onClick={() => swipe('left')}
               sx={{
                 fontSize: 64,
                 transition: 'transform 0.2s ease-in-out, color 0.2s ease-in-out',
@@ -84,12 +109,11 @@ export default function StudySet({params}: { params: {id: string} }) {
                 },
               }}
             />
-            <Stack alignItems={'center'}>
-              <Typography sx={{fontSize: '3rem'}}>{(studySetFlashcards.length + 1) - (cardIndex + 1)} / {studySetFlashcards.length}</Typography>
-              <Typography sx={{fontSize: '2rem'}}>cards left</Typography>
+            <Stack justifyContent={'center'} alignItems={'center'}>
+              <Button variant={`${!canGoBack ? 'outlined': 'contained'}`} onClick={() => goBack()}>Undo swipe!</Button>
             </Stack>
             <EastIcon
-              onClick={handleNext}
+              onClick={() => swipe('right')}
               sx={{
                 fontSize: 64,
                 transition: 'transform 0.2s ease-in-out, color 0.2s ease-in-out',

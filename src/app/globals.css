@@ -65,4 +65,9 @@ body {
 
 html {
 	scroll-behavior: smooth;
-  }
+}
+
+.flashcard {
+	position: absolute;
+	width: 100%;
+}
