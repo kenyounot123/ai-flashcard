@@ -15,9 +15,10 @@ import {
 } from "@mui/material";
 import { doc, collection, getDoc, writeBatch } from "firebase/firestore";
 import { db } from "@/firebase";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
 import { EditableFlashcardGrid } from "./components/EditableFlashcardGrid";
 import { Flashcard } from "@/types";
+import { createFlashcardSet } from "@/app/actions";
 
 const testFlashcards: Flashcard[] = [
   {
@@ -65,37 +66,10 @@ export default function Generate() {
   const handleCloseDialog = () => setDialogOpen(false);
 
   const saveFlashcards = async () => {
-    if (!name.trim()) {
-      alert("Please enter a name for your flashcard set.");
-      return;
-    }
-
     try {
-      if (!user) {
-        alert("Please sign in to save flashcards.");
-        return;
-      }
-      const userDocRef = doc(collection(db, "users"), user.id);
-      console.log(userDocRef);
-      const userDocSnap = await getDoc(userDocRef);
-
-      const batch = writeBatch(db);
-
-      if (userDocSnap.exists()) {
-        const userData = userDocSnap.data();
-        const updatedSets = [...(userData.flashcardSets || []), { name: name }];
-        batch.update(userDocRef, { flashcardSets: updatedSets });
-      } else {
-        batch.set(userDocRef, {
-          flashcardSets: [{ name: name, description: description }],
-        });
-      }
-
-      const setDocRef = doc(collection(userDocRef, "flashcardSets"), name);
-      batch.set(setDocRef, { flashcards });
-
-      await batch.commit();
-
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      await createFlashcardSet(user.id, name, flashcards, description);
       alert("Flashcards saved successfully!");
       handleCloseDialog();
       setName("");
@@ -204,7 +178,7 @@ export default function Generate() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog}>Cancel</Button>
-          <Button onClick={saveFlashcards} color="primary">
+          <Button onClick={() => saveFlashcards()} color="primary">
             Save
           </Button>
         </DialogActions>
