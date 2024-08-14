@@ -80,7 +80,7 @@ export default function PricingSection() {
               </Box>
               <Typography sx={{flexGrow: 1}}>Unlimited saved flashcard sets</Typography>
             </Stack>
-            <Link href={'https://buy.stripe.com/test_fZe5o1gx61Tw7zG8ww'} style={{width: '80%'}}>
+            <Link href={'https://buy.stripe.com/7sIaF5dpX4b6bDi9AB'} style={{width: '80%'}}>
               <Button variant="contained" sx={{fontWeight: 'bold', width: '100%'}}>
                 Upgrade to Pro
               </Button>
