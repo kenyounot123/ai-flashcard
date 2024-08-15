@@ -1,6 +1,28 @@
 import { Box, Typography, Stack, Paper, Button } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('your_publishable_key');
+
+const handleClick = async () => {
+  const stripe = await stripePromise;
+
+  const response = await fetch('/api/checkout-session', {
+    method: 'POST',
+  });
+
+  const session = await response.json();
+
+  const result = await stripe.redirectToCheckout({
+    sessionId: session.id,
+  });
+
+  if (result.error) {
+    console.error(result.error.message);
+  }
+};
+
 export default function PricingSection() {
   return (
     <Box id="pricing" component={'section'} sx={{maxWidth:"xl", py:4, mx: "auto"}}>
