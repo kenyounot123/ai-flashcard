@@ -11,36 +11,6 @@ import { Flashcard } from "@/types";
 import WinningScreen from "./components/WinningScreen";
 import LosingScreen from "./components/LosingScreen";
 // This will use a study set object instead
-const studySetFlashcards = [
-  {
-    id: "1",
-    title: "Algebra Basics",
-    front: "What is the quadratic formula?",
-    back: "The quadratic formula is x = (-b ± √(b² - 4ac)) / 2a.",
-    color: "lightblue"
-  },
-  {
-    id: "2",
-    title: "Physics Fundamentals",
-    front: "What is Newton's second law of motion?",
-    back: "Newton's second law of motion states that F = ma, where F is force, m is mass, and a is acceleration.",
-    color: "lightgreen"
-  },
-  {
-    id: "3",
-    title: "World History",
-    front: "Who was the first emperor of China?",
-    back: "The first emperor of China was Qin Shi Huang.",
-    color: "lightcoral"
-  },
-  {
-    id: "4",
-    title: "Programming 101",
-    front: "What is a variable in programming?",
-    back: "A variable is a storage location identified by a name that holds data which can be changed during program execution.",
-    color: "lightgoldenrodyellow"
-  },
-]
 export default function StudySet({params}: { params: {id: string} }) {
   // fetch the study set from the database using params and return its flashcards
   const [currentIndex, setCurrentIndex] = useState<number>(0)
@@ -49,26 +19,26 @@ export default function StudySet({params}: { params: {id: string} }) {
   const allSwipesRef = useRef<string[]>([])
   const leftSwipeIndicesRef = useRef<number[]>([]);
   const [cardsFinished, setCardsFinished] = useState<'win' | 'lose' | null>(null)
-  const flashCardsDataRef = useRef<Flashcard[]>([])
+  const [flashCardsData, setFlashCardsData] = useState<Flashcard[]>([])
   
-  // useEffect(() => {
-  //   const fetchStudySet = async () => {
-  //     try {
-  //       const studySet = await getFlashcardStudySet(params.id);
-  //       flashCardsDataRef.current = studySet.data(); 
-  //     } catch (error) {
-  //       console.error("Failed to fetch flashcards:", error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchStudySet = async () => {
+      try {
+        const studySet = await getFlashcardStudySet(params.id);
+        setFlashCardsData(studySet.flashcards); 
+      } catch (error) {
+        console.error("Failed to fetch flashcards:", error);
+      }
+    };
 
-  //   fetchStudySet()
+    fetchStudySet()
 
-  // }, [params.id])
+  }, [params.id])
 
 
   const childRefs = useMemo(
     () =>
-      Array(studySetFlashcards.length)
+      Array(flashCardsData.length)
         .fill(0)
         .map((i) => createRef<any>()),
     []
@@ -82,7 +52,7 @@ export default function StudySet({params}: { params: {id: string} }) {
 
   const canSwipe = currentIndex >= 0
 
-  const swiped = (direction: string, nameToDelete: string, index: number) => {
+  const swiped = (direction: string, nameToDelete: string | null, index: number) => {
     // Logic goes here
     setLastDirection(direction)
     updateCurrentIndex(index + 1);
@@ -93,12 +63,12 @@ export default function StudySet({params}: { params: {id: string} }) {
       leftSwipeIndicesRef.current.push(index); // Track the index of the card swiped left
     }
 
-    if (index === studySetFlashcards.length - 1) {
+    if (index === flashCardsData.length - 1) {
       // If all previous swipes were to the right
       if (allSwipesRef.current.every(dir => dir === 'right')) {
         setCardsFinished('win')
       } else {
-        const swipedLeftFlashcards = studySetFlashcards.filter((_, idx) =>
+        const swipedLeftFlashcards = flashCardsData.filter((_, idx) =>
           leftSwipeIndicesRef.current.includes(idx)
         );
         setCardsFinished('lose')
@@ -111,7 +81,8 @@ export default function StudySet({params}: { params: {id: string} }) {
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
   }
   const swipe = async (dir: 'left' | 'right') => {
-    if (canSwipe && currentIndex < studySetFlashcards.length) {
+    console.log(childRefs[currentIndex])
+    if (canSwipe && currentIndex < flashCardsData.length) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
   }
@@ -130,16 +101,16 @@ export default function StudySet({params}: { params: {id: string} }) {
           <WinningScreen/>
         )}
         {cardsFinished === 'lose' && (
-          <LosingScreen flashCardData={flashCardsDataRef.current} leftSwipeIndices={leftSwipeIndicesRef.current}/>
+          <LosingScreen flashCardData={flashCardsData} leftSwipeIndices={leftSwipeIndicesRef.current}/>
         )}
         <Box sx={{maxWidth:"700px", mx: "auto", display: !cardsFinished ? '' : 'none'}}>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>Study set Title</Typography>
-            <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>{currentIndex}/ {studySetFlashcards.length}</Typography>
+            <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>{currentIndex}/ {flashCardsData.length}</Typography>
           </Stack>
           <Box sx={{ width: '100%', maxWidth: '700px', minHeight: '500px', position: 'relative'}}>
-            {studySetFlashcards.map((card, index) => (
-              <TinderCard className={`card ${index === currentIndex ? 'current' : 'hidden'} flashcard` } ref={childRefs[index]} key={card.id} preventSwipe={['up', 'down']} onSwipe={(dir) => swiped(dir, card.title, index)} onCardLeftScreen={() => outOfFrame(card.title, index)}>
+            {flashCardsData.map((card, index) => (
+              <TinderCard className={`card ${index === currentIndex ? 'current' : 'hidden'} flashcard` } ref={childRefs[index]} key={index} preventSwipe={['up', 'down']} onSwipe={(dir) => swiped(dir, null, index)}>
                 <StudySetFlashCard card={card}/>
               </TinderCard>
             ))}

@@ -32,7 +32,7 @@ export async function getFlashcardStudySet(id:string) {
   }
   try {
     const userDocRef = doc(collection(db, "users"), userId);
-    const flashcardSetsCollection = collection(userDocRef, "flashcardsets");
+    const flashcardSetsCollection = collection(userDocRef, "flashcardSets");
     const studySetDocRef = doc(flashcardSetsCollection, id);
     const studySetDoc = await getDoc(studySetDocRef);
     
