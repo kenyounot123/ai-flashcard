@@ -13,6 +13,7 @@
 //   DialogContentText,
 //   DialogActions,
 // } from "@mui/material";
+// import { db } from "@/firebase";
 // import { useUser } from "@clerk/clerk-react";
 // import {
 //   createFlashcardSet,
@@ -25,7 +26,7 @@
 
 // // DELETE THIS PAGE LATER
 
-// const TEST_USER = "user_2kZS6YdbCTEp8tW2BiGBW3EDUdC";
+// const TEST_USER = "user_2x9zzpdffxo5mYrYYY3Y";
 // const TEST_SET_NAME = "Math";
 // const TEST_SET_DESC = "Algebra concepts";
 // const TEST_FLASHCARDS: Flashcard[] = [

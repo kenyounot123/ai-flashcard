@@ -25,19 +25,19 @@ export default function PricingSection() {
             <Typography sx={{fontSize:'1.5rem'}} variant="h2">Free</Typography>
             <Stack mt={5} width={'80%'} justifyContent={'space-between'} direction={'row'} alignItems={'center'}>
               <Box>
-                <Image alt='AI flashcard' width={37} height={44} src={'/icons/checkMark.svg'}/>
+                <Image alt='Flash Prep AI' width={37} height={44} src={'/icons/checkMark.svg'}/>
               </Box>
               <Typography sx={{flexGrow: 1}}>Access to standard flashcards</Typography>
             </Stack>
             <Stack width={'80%'} justifyContent={'space-between'} direction={'row'} alignItems={'center'}>
               <Box>
-                <Image alt='AI flashcard' width={37} height={44} src={'/icons/checkMark.svg'}/>
+                <Image alt='Flash Prep AI' width={37} height={44} src={'/icons/checkMark.svg'}/>
               </Box>
               <Typography sx={{flexGrow: 1}}>Limited flashcard generation</Typography>
             </Stack>
             <Stack width={'80%'} justifyContent={'space-between'} mb={5} direction={'row'} alignItems={'center'}>
               <Box>
-                <Image alt='AI flashcard' width={37} height={44} src={'/icons/checkMark.svg'}/>
+                <Image alt='Flash Prep AI' width={37} height={44} src={'/icons/checkMark.svg'}/>
               </Box>
               <Typography sx={{flexGrow: 1}}>Limited saved flashcard sets</Typography>
             </Stack>
@@ -64,19 +64,19 @@ export default function PricingSection() {
             <Typography sx={{fontSize:'1.5rem'}} variant="h2">One time payment</Typography>
             <Stack width={'80%'} justifyContent={'space-between'} mt={5} direction={'row'} alignItems={'center'}>
               <Box>
-                <Image alt='AI flashcard' width={37} height={44} src={'/icons/checkMark.svg'}/>
+                <Image alt='Flash Prep AI' width={37} height={44} src={'/icons/checkMark.svg'}/>
               </Box>
               <Typography sx={{flexGrow: 1}}>Exclusive content and features</Typography>
             </Stack>
             <Stack width={'80%'} justifyContent={'space-between'} direction={'row'} alignItems={'center'}>
               <Box>
-                <Image alt='AI flashcard' width={37} height={44} src={'/icons/checkMark.svg'}/>
+                <Image alt='Flash Prep AI' width={37} height={44} src={'/icons/checkMark.svg'}/>
               </Box>
               <Typography sx={{flexGrow: 1}}>Unlimited flashcard generation</Typography>
             </Stack>
             <Stack width={'80%'} justifyContent={'space-between'} mb={5} direction={'row'} alignItems={'center'}>
               <Box>
-                <Image alt='AI flashcard' width={37} height={44} src={'/icons/checkMark.svg'}/>
+                <Image alt='Flash Prep AI' width={37} height={44} src={'/icons/checkMark.svg'}/>
               </Box>
               <Typography sx={{flexGrow: 1}}>Unlimited saved flashcard sets</Typography>
             </Stack>

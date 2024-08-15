@@ -52,7 +52,7 @@ const LandingPage = () => {
         }}
       >
         <Link href="#home">
-          <Image alt="AI Flashcard" width={100} height={100} src={'/icons/arrowUp.png'} />
+          <Image alt="Flash Prep AI" width={100} height={100} src={'/icons/arrowUp.png'} />
         </Link>
       </Box>
     </>

@@ -8,6 +8,7 @@ import {
   getDocs,
   query,
   where,
+  setDoc,
   doc,
   writeBatch,
   runTransaction,
@@ -229,3 +230,12 @@ export async function limitedCreateFlashcardSet(
   await limitFreeUsage(5, "createFlashcardSet");
   return await createFlashcardSet(name, flashcards, description);
 }
+
+export async function saveUserToFirestore(userId: string, userData: any) {
+  try {
+    await setDoc(doc(db, "users", userId), userData, { merge: true });
+    console.log("User saved to Firestore");
+  } catch (error) {
+    console.error("Error saving user to Firestore: ", error);
+  }
+};
