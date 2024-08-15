@@ -1,11 +1,8 @@
 import { Paper, Typography, Box } from "@mui/material"
 import { useState } from 'react'
 interface FlashCard {
-  title: string,
-  id: string,
   front: string,
   back: string,
-  color: string
 }
 interface StudySetFlashCardProps {
   card: FlashCard; 
@@ -42,7 +39,7 @@ export default function StudySetFlashCard ({card}:StudySetFlashCardProps) {
       onMouseUp={handleMouseUp}
       onClick={flipCard}
       sx={{
-        backgroundColor: card.color,
+        backgroundColor: `accent.accent2`,
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',

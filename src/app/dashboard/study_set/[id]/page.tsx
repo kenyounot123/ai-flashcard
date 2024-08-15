@@ -3,11 +3,13 @@ import { Typography, Container, Stack, Box, Button, Grid } from "@mui/material";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
 import { useState, useRef, useMemo, createRef, useEffect } from "react";
-import StudySetFlashCard from "./StudySetFlashCard";
+import StudySetFlashCard from "./components/StudySetFlashCard";
 import TinderCard from 'react-tinder-card'
 import Link from "next/link";
-import { getFlashcardsFromStudySet } from "@/app/actions";
+import { getFlashcardStudySet } from "@/app/actions";
 import { Flashcard } from "@/types";
+import WinningScreen from "./components/WinningScreen";
+import LosingScreen from "./components/LosingScreen";
 // This will use a study set object instead
 const studySetFlashcards = [
   {
@@ -50,23 +52,19 @@ export default function StudySet({params}: { params: {id: string} }) {
   const flashCardsDataRef = useRef<Flashcard[]>([])
   
   // useEffect(() => {
-  //   const fetchFlashCards = async () => {
+  //   const fetchStudySet = async () => {
   //     try {
-  //       const flashcards = await getFlashcardsFromStudySet(params.id);
-  //       flashCardsDataRef.current = flashcards; 
+  //       const studySet = await getFlashcardStudySet(params.id);
+  //       flashCardsDataRef.current = studySet.data(); 
   //     } catch (error) {
   //       console.error("Failed to fetch flashcards:", error);
   //     }
   //   };
 
-  //   fetchFlashCards()
+  //   fetchStudySet()
 
   // }, [params.id])
 
-
-  const handleClick = () => {
-    window.location.reload();
-  };
 
   const childRefs = useMemo(
     () =>
@@ -109,7 +107,6 @@ export default function StudySet({params}: { params: {id: string} }) {
   }
 
   const outOfFrame = (name: string, idx: number) => {
-    console.log(`${name} (${idx}) left the screen!`, currentIndexRef.current)
     // handle the case in which go back is pressed before card goes outOfFrame
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
   }
@@ -125,34 +122,15 @@ export default function StudySet({params}: { params: {id: string} }) {
     updateCurrentIndex(newIndex)
     await childRefs[newIndex].current.restoreCard()
   }
+  
   return (
     <>
       <Container sx={{mt:5, py:5, maxWidth:"xl", overflow: 'hidden'}} maxWidth={false}>
         {cardsFinished === 'win' && (
-          <Stack alignItems={'center'} justifyContent={'center'}>
-            <Typography variant="h4" sx={{textAlign: 'center'}}>Congratulations!</Typography>  
-            <Typography sx={{textAlign: 'center'}}>It seems like you know this topic pretty well</Typography>
-            <Stack direction={'row'} spacing={2} alignItems={'center'} justifyContent={'center'}>
-              <Button onClick={handleClick} variant="contained">Review again</Button>
-              <Link href={'/dashboard'}><Button variant="outlined">Back</Button></Link>
-            </Stack>
-          </Stack>
+          <WinningScreen/>
         )}
         {cardsFinished === 'lose' && (
-          <Box>
-            <Typography variant="h4" sx={{textAlign: 'center'}}>Focus on these flash cards, you had trouble with them.</Typography>  
-            <Grid mt={2} container spacing={2}>
-              {studySetFlashcards.filter((_, idx) => leftSwipeIndicesRef.current.includes(idx)).map((card) => (
-                <Grid item xs={12} sm={6} md={4} key={card.id}>
-                  <StudySetFlashCard card={card}/>
-                </Grid>
-              ))}
-            </Grid>
-            <Stack mt={5} direction={'row'} spacing={2} alignItems={'center'} justifyContent={'center'}>
-              <Button onClick={handleClick} variant="contained">Review again</Button>
-              <Link href={'/dashboard'}><Button variant="outlined">Back</Button></Link>
-            </Stack>
-          </Box>
+          <LosingScreen flashCardData={flashCardsDataRef.current} leftSwipeIndices={leftSwipeIndicesRef.current}/>
         )}
         <Box sx={{maxWidth:"700px", mx: "auto", display: !cardsFinished ? '' : 'none'}}>
           <Stack direction={'row'} justifyContent={'space-between'}>

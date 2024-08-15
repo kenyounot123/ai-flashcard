@@ -14,7 +14,7 @@ import {
 } from "firebase/firestore";
 import { auth } from "@clerk/nextjs/server";
 
-export async function getFlashcardsFromStudySet(id:string) {
+export async function getFlashcardStudySet(id:string) {
   const { userId } = auth()
   if (!userId) {
     throw new Error("User is not signed in");
@@ -30,9 +30,9 @@ export async function getFlashcardsFromStudySet(id:string) {
     }
     
     // Extract flashcards from the study set document
-    const flashcards = studySetDoc.data().flashcards || [];
+    const studySet = studySetDoc.data()
     
-    return flashcards;
+    return studySet;
     // get from user -> flashcardsets -> set whose id  === params id
   } catch (error) {
     console.error("Error getting flashcards from study set:", error);

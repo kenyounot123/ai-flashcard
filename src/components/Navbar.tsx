@@ -16,6 +16,7 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "next/link";
 import { SignInButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import Image from "next/image";
 
 const landing = ["Product", "Pricing"];
 const pages = ["Dashboard", "Generate"];
@@ -53,7 +54,9 @@ function ResponsiveAppBar() {
       <Container maxWidth={false}>
         <Toolbar disableGutters>
           <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-            <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
+            <Box sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}>
+              <Image src={'/icons/logo.png'} alt="Flash Prep AI" width={32} height={32} />
+            </Box>
           </Link>
           <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>
             <Typography
@@ -68,7 +71,7 @@ function ResponsiveAppBar() {
                 textDecoration: "none",
               }}
             >
-              AIFlashPrep
+              FlashPrepAI
             </Typography>
           </Link>
 
@@ -139,7 +142,9 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
           <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>
-            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+            <Box sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}>
+              <Image src={'/icons/logo.png'} alt="Flash Prep AI" width={32} height={32} />
+            </Box>
           </Link>
           <Typography
             variant="h5"
@@ -154,7 +159,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>AIFlashPrep</Link>
+            <Link href={"/"} style={{ textDecoration: "none", color: "inherit" }}>FlashPrepAI</Link>
           </Typography>
 
           {/* Large screen width */}
