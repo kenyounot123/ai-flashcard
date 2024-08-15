@@ -23,6 +23,16 @@ function formatDate(date: Date): string {
   return `${month}/${day}/${year}`;
 }
 
+export async function joinWaitlist(email: string) {
+  try {
+    const waitlistRef = collection(db, "waitlist");
+    await setDoc(doc(waitlistRef, email), { email });
+  } catch (error) {
+    console.error("Error joining waitlist:", error);
+    throw new Error("An error occurred while joining the waitlist");
+  }
+}
+
 export async function getFlashcardStudySet(id: string) {
   const { userId } = auth();
   if (!userId) {
