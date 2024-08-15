@@ -138,7 +138,7 @@ export default function PricingSection() {
               </Box>
               <Typography sx={{flexGrow: 1}}>Unlimited saved flashcard sets</Typography>
             </Stack>
-            <Link href="#" passHref>
+            <Link href="#" passHref style={{width: '80%'}}>
               <Button
                 variant="contained"
                 sx={{ fontWeight: 'bold', width: '100%' }}
