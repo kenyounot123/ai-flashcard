@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -11,23 +13,39 @@ import Image from "next/image";
 import FacebookIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import TwitterIcon from "@mui/icons-material/X";
+import { joinWaitlist } from "@/app/actions";
 
-const logoStyle = {
-  width: "140px",
-  height: "auto",
-};
+// const logoStyle = {
+//   width: "140px",
+//   height: "auto",
+// };
 
-function Copyright() {
-  return (
-    <Typography variant="body2" color="text.secondary" mt={1}>
-      {"Copyright © "}
-      <Link href="https://mui.com/">Sitemark&nbsp;</Link>
-      {new Date().getFullYear()}
-    </Typography>
-  );
-}
+// function Copyright() {
+//   return (
+//     <Typography variant="body2" color="text.secondary" mt={1}>
+//       {"Copyright © "}
+//       <Link href="https://mui.com/">Sitemark&nbsp;</Link>
+//       {new Date().getFullYear()}
+//     </Typography>
+//   );
+// }
 
 export default function Footer() {
+
+  const [email, setEmail] = React.useState("");
+
+  const handleSubmit = async (e:any) => {
+    e.preventDefault();
+    try {
+      await joinWaitlist(email);
+      alert("You have successfully joined the waitlist!");
+      setEmail("");
+    } catch (error) {
+      console.error("Error joining waitlist:", error);
+      alert("An error occurred while joining the waitlist");
+    }
+  }
+
   return (
     <Container
       sx={{
@@ -35,7 +53,7 @@ export default function Footer() {
         flexDirection: "column",
         alignItems: "center",
         gap: { xs: 4, sm: 8 },
-        py: { xs: 8, sm: 10 },
+        pt: { xs: 8, sm: 10 },
         textAlign: { sm: "center", md: "left" },
         maxWidth: 'xl'
       }}
@@ -65,10 +83,10 @@ export default function Footer() {
                 src={"/icons/star.png"}
               />
             <Typography variant="body2" fontWeight={600} gutterBottom>
-              Newsletter
+              Waitlist
             </Typography>
             <Typography variant="body2" color="text.secondary" mb={2}>
-              Subscribe to our newsletter for weekly updates and promotions.
+              Join our waitlist for beta access and updates.
             </Typography>
             <Stack direction="row" spacing={1} useFlexGap>
               <TextField
@@ -83,11 +101,14 @@ export default function Footer() {
                   autoComplete: "off",
                   "aria-label": "Enter your email address",
                 }}
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
               />
               <Button
                 variant="contained"
                 color="primary"
                 sx={{ flexShrink: 0 }}
+                onClick={handleSubmit}
               >
                 Subscribe
               </Button>
@@ -104,7 +125,7 @@ export default function Footer() {
           <Typography variant="body2" fontWeight={600}>
             Product
           </Typography>
-          <Link color="text.secondary" href="#">
+          {/* <Link color="text.secondary" href="#">
             Features
           </Link>
           <Link color="text.secondary" href="#">
@@ -112,13 +133,13 @@ export default function Footer() {
           </Link>
           <Link color="text.secondary" href="#">
             Highlights
-          </Link>
-          <Link color="text.secondary" href="#">
+          </Link> */}
+          <Link color="text.secondary" href="/#pricing">
             Pricing
           </Link>
-          <Link color="text.secondary" href="#">
+          {/* <Link color="text.secondary" href="#">
             FAQs
-          </Link>
+          </Link> */}
         </Box>
         <Box
           sx={{
@@ -127,12 +148,12 @@ export default function Footer() {
             gap: 1,
           }}
         >
-          <Typography variant="body2" fontWeight={600}>
+          {/* <Typography variant="body2" fontWeight={600}>
             Company
           </Typography>
           <Link color="text.secondary" href="#">
             About us
-          </Link>
+          </Link> */}
           {/* <Link color="text.secondary" href="#">
             Careers
           </Link>
@@ -156,7 +177,7 @@ export default function Footer() {
           <Link color="text.secondary" href="#">
             Privacy
           </Link> */}
-          <Link color="text.secondary" href="#">
+          <Link color="text.secondary" href="mailto:zhu.kevin12@gmail.com">
             Contact
           </Link>
         </Box>
