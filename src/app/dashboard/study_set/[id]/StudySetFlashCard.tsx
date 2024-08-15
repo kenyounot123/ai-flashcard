@@ -9,24 +9,46 @@ interface FlashCard {
 }
 interface StudySetFlashCardProps {
   card: FlashCard; 
-  hide?: boolean,
 }
-export default function StudySetFlashCard ({card, hide}:StudySetFlashCardProps) {
+export default function StudySetFlashCard ({card}:StudySetFlashCardProps) {
   const [flip, setFlip] = useState(false)
+  const [isSwiping, setIsSwiping] = useState(false);
+  const [startX, setStartX] = useState(0);
+
   const flipCard = () => {
-    setFlip(!flip)
-  }
+    if (!isSwiping) {
+      setFlip(prev => !prev);
+    }
+  };
+
+  const handleMouseDown = (event: React.MouseEvent) => {
+    setStartX(event.clientX);
+    setIsSwiping(true);
+  };
+
+  const handleMouseUp = (event: React.MouseEvent) => {
+    const distance = event.clientX - startX;
+    if (Math.abs(distance) > 30) { // Adjust threshold as needed
+      console.log('Swipe detected');
+      // Perform any swipe-specific logic here
+    } else {
+      setIsSwiping(false);
+      flipCard();
+    }
+  };
   return (
     <Paper
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
       onClick={flipCard}
       sx={{
         backgroundColor: card.color,
-        display: hide ? 'none' : 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
         maxWidth: '700px',
         minHeight: '500px',
+        userSelect: 'none',
         position: 'relative',
         perspective: '1000px', // Required for 3D effect
         transition: 'transform 0.6s ease',

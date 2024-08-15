@@ -14,6 +14,33 @@ import {
 } from "firebase/firestore";
 import { auth } from "@clerk/nextjs/server";
 
+export async function getFlashcardsFromStudySet(id:string) {
+  const { userId } = auth()
+  if (!userId) {
+    throw new Error("User is not signed in");
+  }
+  try {
+    const userDocRef = doc(collection(db, "users"), userId);
+    const flashcardSetsCollection = collection(userDocRef, "flashcardsets");
+    const studySetDocRef = doc(flashcardSetsCollection, id);
+    const studySetDoc = await getDoc(studySetDocRef);
+    
+    if (!studySetDoc.exists()) {
+      throw new Error("Study set not found");
+    }
+    
+    // Extract flashcards from the study set document
+    const flashcards = studySetDoc.data().flashcards || [];
+    
+    return flashcards;
+    // get from user -> flashcardsets -> set whose id  === params id
+  } catch (error) {
+    console.error("Error getting flashcards from study set:", error);
+    throw new Error("An error occurred while getting the flashcards from study set");
+  }
+}
+
+
 export async function createFlashcardSet(
   name: string,
   flashcards: Flashcard[],

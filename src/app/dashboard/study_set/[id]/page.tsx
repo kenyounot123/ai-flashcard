@@ -1,10 +1,13 @@
 'use client'
-import { Typography, Container, Paper, Stack, Box, Button } from "@mui/material";
+import { Typography, Container, Stack, Box, Button, Grid } from "@mui/material";
 import EastIcon from '@mui/icons-material/East';
 import WestIcon from '@mui/icons-material/West';
-import { useState, useRef, useMemo, createRef } from "react";
+import { useState, useRef, useMemo, createRef, useEffect } from "react";
 import StudySetFlashCard from "./StudySetFlashCard";
 import TinderCard from 'react-tinder-card'
+import Link from "next/link";
+import { getFlashcardsFromStudySet } from "@/app/actions";
+import { Flashcard } from "@/types";
 // This will use a study set object instead
 const studySetFlashcards = [
   {
@@ -37,10 +40,33 @@ const studySetFlashcards = [
   },
 ]
 export default function StudySet({params}: { params: {id: string} }) {
-  // fetch the study set from database and return its flashcards
-  const [currentIndex, setCurrentIndex] = useState<number>(studySetFlashcards.length - 1)
+  // fetch the study set from the database using params and return its flashcards
+  const [currentIndex, setCurrentIndex] = useState<number>(0)
   const [lastDirection, setLastDirection] = useState<string | undefined>()
   const currentIndexRef = useRef<number>(currentIndex)
+  const allSwipesRef = useRef<string[]>([])
+  const leftSwipeIndicesRef = useRef<number[]>([]);
+  const [cardsFinished, setCardsFinished] = useState<'win' | 'lose' | null>(null)
+  const flashCardsDataRef = useRef<Flashcard[]>([])
+  
+  // useEffect(() => {
+  //   const fetchFlashCards = async () => {
+  //     try {
+  //       const flashcards = await getFlashcardsFromStudySet(params.id);
+  //       flashCardsDataRef.current = flashcards; 
+  //     } catch (error) {
+  //       console.error("Failed to fetch flashcards:", error);
+  //     }
+  //   };
+
+  //   fetchFlashCards()
+
+  // }, [params.id])
+
+
+  const handleClick = () => {
+    window.location.reload();
+  };
 
   const childRefs = useMemo(
     () =>
@@ -54,14 +80,32 @@ export default function StudySet({params}: { params: {id: string} }) {
     currentIndexRef.current = val
   }
 
-  const canGoBack = currentIndex < studySetFlashcards.length - 1
+  const canGoBack = currentIndex !== 0
 
   const canSwipe = currentIndex >= 0
 
   const swiped = (direction: string, nameToDelete: string, index: number) => {
     // Logic goes here
     setLastDirection(direction)
-    updateCurrentIndex(index - 1)
+    updateCurrentIndex(index + 1);
+
+    allSwipesRef.current.push(direction)
+
+    if (direction === 'left') {
+      leftSwipeIndicesRef.current.push(index); // Track the index of the card swiped left
+    }
+
+    if (index === studySetFlashcards.length - 1) {
+      // If all previous swipes were to the right
+      if (allSwipesRef.current.every(dir => dir === 'right')) {
+        setCardsFinished('win')
+      } else {
+        const swipedLeftFlashcards = studySetFlashcards.filter((_, idx) =>
+          leftSwipeIndicesRef.current.includes(idx)
+        );
+        setCardsFinished('lose')
+      }
+    }
   }
 
   const outOfFrame = (name: string, idx: number) => {
@@ -76,23 +120,48 @@ export default function StudySet({params}: { params: {id: string} }) {
   }
   const goBack = async () => {
     if (!canGoBack) return
-    const newIndex = currentIndex + 1
+    const newIndex = currentIndex - 1
+    allSwipesRef.current.pop()
     updateCurrentIndex(newIndex)
     await childRefs[newIndex].current.restoreCard()
   }
   return (
     <>
       <Container sx={{mt:5, py:5, maxWidth:"xl", overflow: 'hidden'}} maxWidth={false}>
-        <Box sx={{maxWidth:"700px", mx: "auto",}}>
+        {cardsFinished === 'win' && (
+          <Stack alignItems={'center'} justifyContent={'center'}>
+            <Typography variant="h4" sx={{textAlign: 'center'}}>Congratulations!</Typography>  
+            <Typography sx={{textAlign: 'center'}}>It seems like you know this topic pretty well</Typography>
+            <Stack direction={'row'} spacing={2} alignItems={'center'} justifyContent={'center'}>
+              <Button onClick={handleClick} variant="contained">Review again</Button>
+              <Link href={'/dashboard'}><Button variant="outlined">Back</Button></Link>
+            </Stack>
+          </Stack>
+        )}
+        {cardsFinished === 'lose' && (
+          <Box>
+            <Typography variant="h4" sx={{textAlign: 'center'}}>Focus on these flash cards, you had trouble with them.</Typography>  
+            <Grid mt={2} container spacing={2}>
+              {studySetFlashcards.filter((_, idx) => leftSwipeIndicesRef.current.includes(idx)).map((card) => (
+                <Grid item xs={12} sm={6} md={4} key={card.id}>
+                  <StudySetFlashCard card={card}/>
+                </Grid>
+              ))}
+            </Grid>
+            <Stack mt={5} direction={'row'} spacing={2} alignItems={'center'} justifyContent={'center'}>
+              <Button onClick={handleClick} variant="contained">Review again</Button>
+              <Link href={'/dashboard'}><Button variant="outlined">Back</Button></Link>
+            </Stack>
+          </Box>
+        )}
+        <Box sx={{maxWidth:"700px", mx: "auto", display: !cardsFinished ? '' : 'none'}}>
           <Stack direction={'row'} justifyContent={'space-between'}>
             <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>Study set Title</Typography>
             <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>{currentIndex}/ {studySetFlashcards.length}</Typography>
           </Stack>
-          <Box sx={{ width: '100%',
-              maxWidth: '700px',
-              minHeight: '500px', position: 'relative'}}>
+          <Box sx={{ width: '100%', maxWidth: '700px', minHeight: '500px', position: 'relative'}}>
             {studySetFlashcards.map((card, index) => (
-              <TinderCard ref={childRefs[index]} className="flashcard" key={card.id} preventSwipe={['up', 'down']} onSwipe={(dir) => swiped(dir, card.title, index)} onCardLeftScreen={() => outOfFrame(card.title, index)}>
+              <TinderCard className={`card ${index === currentIndex ? 'current' : 'hidden'} flashcard` } ref={childRefs[index]} key={card.id} preventSwipe={['up', 'down']} onSwipe={(dir) => swiped(dir, card.title, index)} onCardLeftScreen={() => outOfFrame(card.title, index)}>
                 <StudySetFlashCard card={card}/>
               </TinderCard>
             ))}
