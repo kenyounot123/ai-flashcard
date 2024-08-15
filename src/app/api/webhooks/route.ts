@@ -53,9 +53,10 @@ export async function POST(req: Request) {
   // For this guide, you simply log the payload to the console
   const { id } = evt.data
   const userId: string = id || ""
+  console.log(userId)
   const eventType = evt.type
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-  if (eventType === 'user.created'|| 'user.createdAtEdge') {
+  if (eventType === 'user.created') {
     try {
       // Update Firestore with the new subscription field
       const userRef = doc(db, 'users', userId);
