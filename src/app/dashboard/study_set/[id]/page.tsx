@@ -1,7 +1,7 @@
 'use client'
 import { Typography, Container, Stack, Box, Button, Grid } from "@mui/material";
-import EastIcon from '@mui/icons-material/East';
-import WestIcon from '@mui/icons-material/West';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 import { useState, useRef, useMemo, createRef, useEffect } from "react";
 import StudySetFlashCard from "./components/StudySetFlashCard";
 import TinderCard from 'react-tinder-card'
@@ -123,13 +123,13 @@ export default function StudySet({params}: { params: {id: string} }) {
             ))}
           </Box>
           <Stack sx={{}} direction={'row'} justifyContent={'space-between'}>
-            <WestIcon
+            <CloseIcon
               onClick={() => swipe('left')}
               sx={{
                 fontSize: 64,
+                color: "#FF5C9F",
                 transition: 'transform 0.2s ease-in-out, color 0.2s ease-in-out',
                 '&:hover': {
-                  color: "#FF5C9F",
                   transform: 'scale(1.1)',
                 },
               }}
@@ -137,17 +137,21 @@ export default function StudySet({params}: { params: {id: string} }) {
             <Stack justifyContent={'center'} alignItems={'center'}>
               <Button variant={`${!canGoBack ? 'outlined': 'contained'}`} onClick={() => goBack()}>Undo swipe!</Button>
             </Stack>
-            <EastIcon
+            <CheckIcon
               onClick={() => swipe('right')}
               sx={{
                 fontSize: 64,
+                color: "#ABD80C",
                 transition: 'transform 0.2s ease-in-out, color 0.2s ease-in-out',
                 '&:hover': {
-                  color: "#CCFD1C",
                   transform: 'scale(1.1)',
                 },
               }}
             />
+          </Stack>
+          <Stack alignItems={'center'}>
+            <Typography>Swipe <Box sx={{color: "#ABD80C"}} component={'span'}>RIGHT</Box> if you correctly defined the flash card</Typography>
+            <Typography>Swipe <Box sx={{color: "#FF5C9F"}} component={'span'}>LEFT</Box> if you were not able to define the flash card</Typography>
           </Stack>
         </Box>
       </Container>
