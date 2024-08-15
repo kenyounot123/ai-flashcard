@@ -1,6 +1,8 @@
 import { Webhook } from 'svix'
 import { headers } from 'next/headers'
 import { WebhookEvent } from '@clerk/nextjs/server'
+import { db } from '@/firebase'
+import { doc, setDoc } from 'firebase/firestore'
 
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the endpoint
@@ -50,9 +52,23 @@ export async function POST(req: Request) {
   // Do something with the payload
   // For this guide, you simply log the payload to the console
   const { id } = evt.data
+  const userId: string = id || ""
   const eventType = evt.type
   console.log(`Webhook with and ID of ${id} and type of ${eventType}`)
-  console.log('Webhook body:', body)
+  if (eventType === 'user.created'|| 'user.createdAtEdge') {
+    try {
+      // Update Firestore with the new subscription field
+      const userRef = doc(db, 'users', userId);
+      await setDoc(userRef, { subscription: 'free' }, { merge: true });
+
+      console.log(`User ${id} subscription set to free`);
+    } catch (error) {
+      console.error('Error updating user subscription in Firestore:', error);
+      return new Response('Error occurred updating Firestore', {
+        status: 500,
+      });
+    }
+  }
 
   return new Response('', { status: 200 })
 }
