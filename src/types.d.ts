@@ -10,6 +10,7 @@ export interface FlashcardSet {
   name: string;
   flashcards: Flashcard[];
   description?: string;
+  date: string;
   
   // This might be useful in determining the color to use for the flashcards from this particular set
   color?:string

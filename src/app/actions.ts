@@ -15,6 +15,16 @@ import {
 } from "firebase/firestore";
 import { auth } from "@clerk/nextjs/server";
 
+
+function formatDate(date: Date): string {
+  const month = date.getMonth() + 1; // Months are zero-based
+  const day = date.getDate();
+  const year = date.getFullYear();
+  
+  return `${month}/${day}/${year}`;
+}
+
+
 export async function getFlashcardStudySet(id:string) {
   const { userId } = auth()
   if (!userId) {
@@ -48,7 +58,6 @@ export async function createFlashcardSet(
   description?: string
 ): Promise<FlashcardSet> {
   const { userId } = auth();
-
   if (!userId) {
     throw new Error("User is not signed in");
   }
@@ -67,10 +76,13 @@ export async function createFlashcardSet(
     }
 
     const newSetRef = doc(collection(userDocRef, "flashcardSets"));
+    const currentDate = formatDate(new Date())
+
     batch.set(newSetRef, {
       name: name,
       description: description,
       flashcards: flashcards,
+      date: currentDate,
     });
 
     await batch.commit();
@@ -79,6 +91,7 @@ export async function createFlashcardSet(
       name,
       description,
       flashcards,
+      date: currentDate,
     };
     return flashcardSet;
   } catch (error) {
@@ -145,6 +158,7 @@ export async function updateFlashcardSet(
     name: newName || name,
     description,
     flashcards: flashcards || setDocSnap.data().flashcards,
+    date: setDocSnap.data().date
   };
   batch.update(setDocRef, updatedFlashcardSet);
   await batch.commit();
