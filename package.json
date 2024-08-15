@@ -23,11 +23,11 @@
     "openai": "^4.55.5",
     "react": "^18",
     "react-dom": "^18",
-
     "react-swipeable-views-utils-react-18-fix": "^0.14.1",
     "react-tinder-card": "^1.6.4",
     "svix": "^1.29.0",
     "stripe": "^16.7.0"
+
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
