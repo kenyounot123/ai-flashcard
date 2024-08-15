@@ -5,11 +5,11 @@ import WestIcon from '@mui/icons-material/West';
 import { useState, useRef, useMemo, createRef, useEffect } from "react";
 import StudySetFlashCard from "./components/StudySetFlashCard";
 import TinderCard from 'react-tinder-card'
-import Link from "next/link";
 import { getFlashcardStudySet } from "@/app/actions";
 import { Flashcard } from "@/types";
 import WinningScreen from "./components/WinningScreen";
 import LosingScreen from "./components/LosingScreen";
+import CircularProgress from '@mui/material/CircularProgress';
 // This will use a study set object instead
 export default function StudySet({params}: { params: {id: string} }) {
   // fetch the study set from the database using params and return its flashcards
@@ -20,6 +20,7 @@ export default function StudySet({params}: { params: {id: string} }) {
   const leftSwipeIndicesRef = useRef<number[]>([]);
   const [cardsFinished, setCardsFinished] = useState<'win' | 'lose' | null>(null)
   const [flashCardsData, setFlashCardsData] = useState<Flashcard[]>([])
+  const [loading, setLoading] = useState(true)
   
   useEffect(() => {
     const fetchStudySet = async () => {
@@ -28,6 +29,8 @@ export default function StudySet({params}: { params: {id: string} }) {
         setFlashCardsData(studySet.flashcards); 
       } catch (error) {
         console.error("Failed to fetch flashcards:", error);
+      } finally {
+        setLoading(false)
       }
     };
 
@@ -41,7 +44,7 @@ export default function StudySet({params}: { params: {id: string} }) {
       Array(flashCardsData.length)
         .fill(0)
         .map((i) => createRef<any>()),
-    []
+    [flashCardsData.length]
   )
   const updateCurrentIndex = (val: number) => {
     setCurrentIndex(val)
@@ -81,7 +84,6 @@ export default function StudySet({params}: { params: {id: string} }) {
     currentIndexRef.current >= idx && childRefs[idx].current.restoreCard()
   }
   const swipe = async (dir: 'left' | 'right') => {
-    console.log(childRefs[currentIndex])
     if (canSwipe && currentIndex < flashCardsData.length) {
       await childRefs[currentIndex].current.swipe(dir) // Swipe the card!
     }
@@ -108,7 +110,12 @@ export default function StudySet({params}: { params: {id: string} }) {
             <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>Study set Title</Typography>
             <Typography textAlign="center" variant="body1" mb={3} sx={{fontSize: '2rem'}}>{currentIndex}/ {flashCardsData.length}</Typography>
           </Stack>
-          <Box sx={{ width: '100%', maxWidth: '700px', minHeight: '500px', position: 'relative'}}>
+          <Box sx={{ width: '100%', maxWidth: '700px', minHeight: '500px', position: 'relative', display: 'flex', justifyContent:"center", alignItems:"center"}}>
+            {loading && (
+              <Box>
+                <CircularProgress />
+              </Box>
+            )}
             {flashCardsData.map((card, index) => (
               <TinderCard className={`card ${index === currentIndex ? 'current' : 'hidden'} flashcard` } ref={childRefs[index]} key={index} preventSwipe={['up', 'down']} onSwipe={(dir) => swiped(dir, null, index)}>
                 <StudySetFlashCard card={card}/>
