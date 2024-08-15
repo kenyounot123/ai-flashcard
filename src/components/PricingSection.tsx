@@ -1,23 +1,46 @@
 import { Box, Typography, Stack, Paper, Button } from "@mui/material";
-import { useRouter } from 'next/router';
+import { doc, collection, getDoc, writeBatch } from "firebase/firestore";
+import { db } from "@/firebase";
 import { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { loadStripe } from '@stripe/stripe-js';
+import { useUser } from "@clerk/clerk-react";
 
 export default function PricingSection() {
   const [loading, setLoading] = useState(false);
+  const { isLoaded, isSignedIn, user } = useUser();
 
   const handleClick = async (e) => {
-    e.preventDefault(); // Prevent the default navigation behavior of the Link
+    e.preventDefault(); // Prevent the default navigation behavior
     setLoading(true);
 
     try {
+      if (!user) {
+        alert('You must be logged in to upgrade to Pro.');
+        setLoading(false);
+        return;
+      }
+
+      // Get a reference to the user's document
+      const userDocRef = doc(collection(db, 'users'), user.id);
+
+      // Fetch the user's subscription status from Firestore
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists() && userDoc.data().subscription === 'pro') {
+        alert('You are already a pro member!');
+        setLoading(false);
+        return;
+      }
+
+      // Proceed with creating a Stripe checkout session
       const res = await fetch('/api/checkout-session', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({ userId: user.id }),
       });
 
       const session = await res.json();
