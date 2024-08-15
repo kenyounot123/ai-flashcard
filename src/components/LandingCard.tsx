@@ -15,7 +15,7 @@ const LandingCard = ({cardColor, content, title, icon, rotate}: LandingCardProps
     <Stack sx={{rotate: `${rotate}deg`}} justifyContent={"center"} alignItems={"center"}>
       <Box sx={{width: "100%"}}>
         <Stack justifyContent={"center"} direction="row" alignItems={"center"}>
-          {icon && <Image alt="AI Flashcard" width={50} height={50} src={icon}/>}
+          {icon && <Image alt="Flash Prep AI" width={50} height={50} src={icon}/>}
           <Typography fontWeight={600} variant='h5'>{title}</Typography>
         </Stack>
       </Box>

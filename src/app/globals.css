@@ -65,4 +65,22 @@ body {
 
 html {
 	scroll-behavior: smooth;
-  }
+}
+
+.flashcard {
+	position: absolute;
+	width: 100%;
+}
+.hidden {
+  display: none;
+}
+
+.card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.current {
+  z-index: 1;
+}

@@ -5,9 +5,10 @@ interface FlashcardProps {
   cardColor: string,
   title: string,
   date: string,
-  content: string
+  content: string,
+  hover?: boolean,
 }
-export default function Flashcard({rotate, cardColor, title, date, content}:FlashcardProps) {
+export default function Flashcard({hover, rotate, cardColor, title, date, content}:FlashcardProps) {
   return (
     <Paper
       square
@@ -16,15 +17,18 @@ export default function Flashcard({rotate, cardColor, title, date, content}:Flas
         minWidth: '308px',
         minHeight: '109.7px',
         maxWidth: '444.93px',
-        maxHeight: '131px',
         rotate: `${rotate}deg`,
         backgroundColor: `${cardColor}`,
+        transition: 'transform ease-in-out 0.2s',
+        '&:hover' : {
+          transform: `${hover && 'translateY(-10px) rotate(2deg)'}`,
+        },
         p:2}} >
           <Stack mb={2} direction={'row'} justifyContent={'space-between'}>
             <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>{title}</Typography>
             <Typography sx={{fontSize: '1.5rem', fontWeight: 'bold'}}>{date}</Typography>
           </Stack>
-          <Typography>{content}</Typography>
+          <Typography sx={{fontSize: '1.25rem'}}>{content}</Typography>
     </Paper>
   )
 } 

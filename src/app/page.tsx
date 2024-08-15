@@ -37,9 +37,14 @@ const LandingPage = () => {
         component="aside"
         sx={{
           position: 'fixed',
-          bottom: 16,
-          right: 16,
+          bottom: 20,
+          right: 20,
+          backgroundColor: 'white',
+          width: 100,
+          height: 100,
+          borderRadius: '50%',
           zIndex: 1000, 
+          boxShadow: '0px 0px 5px 0px rgba(0,0,0,0.75)',
           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
           '&:hover': {
             transform: 'scale(1.1)', // Slightly enlarges the button
@@ -47,7 +52,7 @@ const LandingPage = () => {
         }}
       >
         <Link href="#home">
-          <Image alt="AI Flashcard" width={100} height={100} src={'/icons/arrowUp.png'} />
+          <Image alt="Flash Prep AI" width={100} height={100} src={'/icons/arrowUp.png'} />
         </Link>
       </Box>
     </>

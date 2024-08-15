@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import OpenAI from "openai";
+import { auth } from "@clerk/nextjs/server";
+import { limitFreeUsage } from "@/app/actions";
 
 const systemPrompt = `
 You are a flashcard creator, you take in text and create multiple flashcards from it. Make sure to create exactly 10 flashcards.
@@ -16,6 +18,18 @@ You should return in the following JSON format:
 `;
 
 export async function POST(req) {
+  const { userId } = auth();
+
+  if (!userId) {
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
+  }
+
+  // Limit free usage
+  await limitFreeUsage(10, "generateAiFlashcards");
+
   const openai = new OpenAI();
   const data = await req.text();
 
