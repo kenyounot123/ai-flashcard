@@ -69,7 +69,7 @@ export default function Generate() {
     try {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      await createFlashcardSet(user.id, name, flashcards, description);
+      await createFlashcardSet(name, flashcards, description);
       alert("Flashcards saved successfully!");
       handleCloseDialog();
       setName("");

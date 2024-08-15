@@ -15,18 +15,16 @@ import {
 } from "firebase/firestore";
 import { auth } from "@clerk/nextjs/server";
 
-
 function formatDate(date: Date): string {
   const month = date.getMonth() + 1; // Months are zero-based
   const day = date.getDate();
   const year = date.getFullYear();
-  
+
   return `${month}/${day}/${year}`;
 }
 
-
-export async function getFlashcardStudySet(id:string) {
-  const { userId } = auth()
+export async function getFlashcardStudySet(id: string) {
+  const { userId } = auth();
   if (!userId) {
     throw new Error("User is not signed in");
   }
@@ -35,22 +33,23 @@ export async function getFlashcardStudySet(id:string) {
     const flashcardSetsCollection = collection(userDocRef, "flashcardSets");
     const studySetDocRef = doc(flashcardSetsCollection, id);
     const studySetDoc = await getDoc(studySetDocRef);
-    
+
     if (!studySetDoc.exists()) {
       throw new Error("Study set not found");
     }
-    
+
     // Extract flashcards from the study set document
-    const studySet = studySetDoc.data()
-    
+    const studySet = studySetDoc.data();
+
     return studySet;
     // get from user -> flashcardsets -> set whose id  === params id
   } catch (error) {
     console.error("Error getting flashcards from study set:", error);
-    throw new Error("An error occurred while getting the flashcards from study set");
+    throw new Error(
+      "An error occurred while getting the flashcards from study set"
+    );
   }
 }
-
 
 export async function createFlashcardSet(
   name: string,
@@ -76,7 +75,7 @@ export async function createFlashcardSet(
     }
 
     const newSetRef = doc(collection(userDocRef, "flashcardSets"));
-    const currentDate = formatDate(new Date())
+    const currentDate = formatDate(new Date());
 
     batch.set(newSetRef, {
       name: name,
@@ -103,13 +102,23 @@ export async function createFlashcardSet(
 // Reads all flashcard sets for a user
 export async function readFlashcardSets(): Promise<FlashcardSet[]> {
   const { userId } = auth();
-  console.log(userId);
 
   if (!userId) {
     throw new Error("User is not signed in");
   }
 
   const userDocRef = doc(collection(db, "users"), userId);
+  const userDocSnap = await getDoc(userDocRef);
+
+  if (!userDocSnap.exists()) {
+    // Create user doc
+    const newUserData = {
+      flashcardSets: [],
+      subscription: "free",
+      actionUsage: {},
+    };
+    setDoc(userDocRef, newUserData);
+  }
   const flashcardSetsRef = collection(userDocRef, "flashcardSets");
   const flashcardSetsQuery = query(flashcardSetsRef);
 
@@ -158,7 +167,7 @@ export async function updateFlashcardSet(
     name: newName || name,
     description,
     flashcards: flashcards || setDocSnap.data().flashcards,
-    date: setDocSnap.data().date
+    date: setDocSnap.data().date,
   };
   batch.update(setDocRef, updatedFlashcardSet);
   await batch.commit();
@@ -203,10 +212,19 @@ export async function limitFreeUsage(usage: number, action: string) {
   const userDocRef = doc(collection(db, "users"), userId);
 
   const userDoc = await runTransaction(db, async (transaction) => {
-    const userDocSnap = await transaction.get(userDocRef);
+    let userDocSnap = await transaction.get(userDocRef);
 
     if (!userDocSnap.exists()) {
-      throw new Error("User document does not exist");
+      // Create user doc
+      const newUserData = {
+        flashcardSets: [],
+        subscription: "free",
+        actionUsage: {
+          [action]: 1,
+        },
+      };
+      transaction.set(userDocRef, newUserData);
+      return newUserData;
     }
 
     const userData = userDocSnap.data();
@@ -252,4 +270,4 @@ export async function saveUserToFirestore(userId: string, userData: any) {
   } catch (error) {
     console.error("Error saving user to Firestore: ", error);
   }
-};
+}

@@ -21,11 +21,14 @@ export async function POST(req) {
   const { userId } = auth();
 
   if (!userId) {
-    return NextResponse.error(new Error("Unauthorized"), { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401 }
+    );
   }
 
   // Limit free usage
-  await limitFreeUsage(userId, 10, "generateAiFlashcards");
+  await limitFreeUsage(10, "generateAiFlashcards");
 
   const openai = new OpenAI();
   const data = await req.text();

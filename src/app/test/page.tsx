@@ -61,7 +61,7 @@ export default function TestRoute() {
   }
 
   function handleReadSets() {
-    readFlashcardSets(TEST_USER).then((sets) => {
+    readFlashcardSets().then((sets) => {
       setSets(sets);
     });
   }
@@ -69,7 +69,6 @@ export default function TestRoute() {
   // works in db, not in client -- too lazy to fix
   function handleUpdateSet() {
     updateFlashcardSet(
-      TEST_USER,
       mostRecentSet?.id as string,
       TEST_SET_NAME,
       TEST_SET_DESC,
