@@ -6,12 +6,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { loadStripe } from '@stripe/stripe-js';
 import { useUser } from "@clerk/clerk-react";
+import React from 'react';
 
 export default function PricingSection() {
   const [loading, setLoading] = useState(false);
   const { isLoaded, isSignedIn, user } = useUser();
 
-  const handleClick = async (e) => {
+  const handleClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // Prevent the default navigation behavior
     setLoading(true);
 
@@ -46,6 +47,11 @@ export default function PricingSection() {
       const session = await res.json();
 
       const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
+
+      if (!stripe) {
+        console.error('Stripe failed to load.');
+        return;
+      }
 
       await stripe.redirectToCheckout({ sessionId: session.id });
     } catch (error) {
