@@ -27,10 +27,28 @@ export default function StudySetFlashCard ({card}:StudySetFlashCardProps) {
     const distance = event.clientX - startX;
     if (Math.abs(distance) > 30) { // Adjust threshold as needed
       console.log('Swipe detected');
-      // Perform any swipe-specific logic here
     } else {
       setIsSwiping(false);
       flipCard();
+    }
+  };
+  const handleTouchStart = (event: React.TouchEvent) => {
+    const touch = event.touches[0];
+    console.log(touch)
+    setStartX(touch.clientX);
+    setIsSwiping(true);
+  };
+
+  const handleTouchEnd = (event: React.TouchEvent) => {
+    event.preventDefault();
+    const touch = event.changedTouches[0];
+    console.log(touch)
+    const distance = touch.clientX - startX;
+    if (Math.abs(distance) > 30) { // Adjust threshold as needed
+      console.log('Swipe detected');
+    } else {
+      setIsSwiping(false);
+      setFlip(prev => !prev);
     }
   };
   return (
@@ -38,6 +56,8 @@ export default function StudySetFlashCard ({card}:StudySetFlashCardProps) {
       onMouseDown={handleMouseDown}
       onMouseUp={handleMouseUp}
       onClick={flipCard}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       sx={{
         backgroundColor: `accent.accent2`,
         justifyContent: 'center',

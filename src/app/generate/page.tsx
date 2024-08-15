@@ -16,48 +16,17 @@ import {
 import { EditableFlashcardGrid } from "./components/EditableFlashcardGrid";
 import { Flashcard } from "@/types";
 import { createFlashcardSet } from "@/app/actions";
-
-// const testFlashcards: Flashcard[] = [
-//   {
-//     front: "What is the capital of France?",
-//     back: "Paris",
-//   },
-//   {
-//     front: "What is the capital of Germany?",
-//     back: "Berlin",
-//   },
-//   {
-//     front: "What is the capital of Italy?",
-//     back: "Rome",
-//   },
-//   {
-//     front: "What is the capital of Spain?",
-//     back: "Madrid",
-//   },
-//   {
-//     front: "What is the capital of the United Kingdom?",
-//     back: "London",
-//   },
-//   {
-//     front: "What is the capital of the United States?",
-//     back: "Washington, D.C.",
-//   },
-//   {
-//     front: "What is the capital of Canada?",
-//     back: "Ottawa",
-//   },
-//   {
-//     front: "What is the capital of Mexico?",
-//     back: "Mexico City",
-//   },
-// ];
+import CircularProgress from '@mui/material/CircularProgress';
+import { useRouter } from "next/navigation";
 
 export default function Generate() {
+  const router = useRouter()
   const [text, setText] = useState("");
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const handleOpenDialog = () => setDialogOpen(true);
   const handleCloseDialog = () => setDialogOpen(false);
 
@@ -70,6 +39,7 @@ export default function Generate() {
       handleCloseDialog();
       setName("");
       setDescription("");
+      router.push('/dashboard')
     } catch (error) {
       console.error("Error saving flashcards:", error);
       alert("An error occurred while saving flashcards. Please try again.");
@@ -77,6 +47,7 @@ export default function Generate() {
   };
 
   const handleSubmit = async () => {
+    setLoading(true)
     if (!text.trim()) {
       alert("Please enter some text to generate flashcards.");
       return;
@@ -97,6 +68,8 @@ export default function Generate() {
     } catch (error) {
       console.error("Error generating flashcards:", error);
       alert("An error occurred while generating flashcards. Please try again.");
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -130,6 +103,11 @@ export default function Generate() {
         <Typography variant="h5" component="h2" gutterBottom>
           Generated Flashcards
         </Typography>
+        {loading && (
+          <Box>
+            <CircularProgress />
+          </Box>
+        )}
         <EditableFlashcardGrid
           flashcards={flashcards}
           setFlashcards={setFlashcards}

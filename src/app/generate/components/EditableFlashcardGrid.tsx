@@ -104,7 +104,7 @@ export function EditableFlashcardGrid({
                   onKeyDown={handleKeyDown}
                 />
               ) : (
-                <Typography sx={{ p: 2 }}>{flashcard.front}</Typography>
+                <Typography variant={'body2'} sx={{ p: 2, fontSize: 20 }}>{flashcard.front}</Typography>
               )}
 
               <Typography variant="h6" sx={{ mt: 2 }}>
@@ -119,7 +119,7 @@ export function EditableFlashcardGrid({
                   onKeyDown={handleKeyDown}
                 />
               ) : (
-                <Typography sx={{ p: 2 }}>{flashcard.back}</Typography>
+                <Typography variant={'body2'} sx={{ p: 2, fontSize: 20 }}>{flashcard.back}</Typography>
               )}
 
               <Box
