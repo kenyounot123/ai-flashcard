@@ -1,29 +1,36 @@
 import { Box, Typography, Stack, Paper, Button } from "@mui/material";
+import { useRouter } from 'next/router';
+import { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link";
 import { loadStripe } from '@stripe/stripe-js';
 
-const stripePromise = loadStripe('your_publishable_key');
-
-const handleClick = async () => {
-  const stripe = await stripePromise;
-
-  const response = await fetch('/api/checkout-session', {
-    method: 'POST',
-  });
-
-  const session = await response.json();
-
-  const result = await stripe.redirectToCheckout({
-    sessionId: session.id,
-  });
-
-  if (result.error) {
-    console.error(result.error.message);
-  }
-};
-
 export default function PricingSection() {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = async (e) => {
+    e.preventDefault(); // Prevent the default navigation behavior of the Link
+    setLoading(true);
+
+    try {
+      const res = await fetch('/api/checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      const session = await res.json();
+
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || "");
+
+      await stripe.redirectToCheckout({ sessionId: session.id });
+    } catch (error) {
+      console.error('Error during Stripe checkout:', error);
+      setLoading(false);
+    }
+  };
+
   return (
     <Box id="pricing" component={'section'} sx={{maxWidth:"xl", py:4, mx: "auto"}}>
       <Box sx={{textAlign: 'center'}}>
@@ -102,9 +109,14 @@ export default function PricingSection() {
               </Box>
               <Typography sx={{flexGrow: 1}}>Unlimited saved flashcard sets</Typography>
             </Stack>
-            <Link href={'https://buy.stripe.com/7sIaF5dpX4b6bDi9AB'} style={{width: '80%'}}>
-              <Button variant="contained" sx={{fontWeight: 'bold', width: '100%'}}>
-                Upgrade to Pro
+            <Link href="#" passHref>
+              <Button
+                variant="contained"
+                sx={{ fontWeight: 'bold', width: '100%' }}
+                onClick={handleClick}
+                disabled={loading}
+              >
+              Upgrade to Pro
               </Button>
             </Link>
           </Stack>

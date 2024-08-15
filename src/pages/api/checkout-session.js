@@ -3,7 +3,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export default async function handler(req, res) {
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ['card', 'us_bank_account', 'applepay'],
+    payment_method_types: ['card', 'us_bank_account'],
     line_items: [
       {
         price: process.env.PRICE_ID, 
