@@ -1,7 +1,26 @@
 import { Box, Typography, Stack, Paper, Button } from "@mui/material";
 import Flashcard from "./Flashcard";
-import Link from "next/link";
 
+function Video() {
+  return (
+    <video style={{
+      width: "100%", 
+      height: "auto", 
+      borderRadius: 12, 
+      boxShadow: "0px 4px 15px rgba(0, 0, 0, 0.2)"
+    }} 
+    width="0" 
+    height="0"
+    playsInline 
+    autoPlay 
+    muted
+    loop 
+    preload="auto">
+      <source src="/demo.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  )
+}
 export default function ProductSection() {
   return (
     <Box id="product" component={'section'} sx={{maxWidth:"xl", py:4, mx: "auto", minHeight: "1000px"}}>
@@ -10,12 +29,10 @@ export default function ProductSection() {
           <Typography sx={{fontSize: 52, fontWeight: "bold"}} variant="h1">Simple.</Typography>
           <Typography sx={{fontSize: 52, fontWeight: "bold"}} variant="h1">Easy To Use.</Typography>
           <Typography sx={{fontSize: 52, fontWeight: "bold"}} variant="h1">Effortless.</Typography>
-          <Typography sx={{fontSize: 24, my:5}} variant="body2">Provide a prompt, and let AI generate personalized flashcards for you. Save these flashcards as study sets if you&apos;re logged in, and easily create, edit, update, or delete cards to fit your needs. </Typography>
-          <Link href={"/generate"}>
-            <Button sx={{ textWrap: 'nowrap', width:"min-content", fontWeight:"bold", fontSize: 24, py:1, px: 2}} variant="contained">
-              Get Started
-            </Button>
-          </Link>
+          <Typography sx={{fontSize: 24, my:1}} variant="body2">Provide a prompt, and let AI generate personalized flashcards for you. Save these flashcards as study sets if you&apos;re logged in, and easily create, edit, update, or delete cards to fit your needs. </Typography>
+          <Box>
+            <Video/>
+          </Box>
         </Stack>
         <Box sx={{minWidth:'30%', display: 'flex', flexDirection: 'column', gap:5}}>
           <Flashcard
