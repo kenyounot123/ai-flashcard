@@ -11,16 +11,16 @@ const LandingPage = () => {
   return (
     <>
       <Container sx={{py:{xs: 5, lg: 10}}} maxWidth={false}>
-        <Stack sx={{minHeight: "1000px"}} spacing={7} alignItems={"center"}>
-          <Typography sx={{textAlign: "center", fontSize: 52, fontWeight: "bold", maxWidth:{lg:"50%"}}} variant='h1'>
+        <Stack sx={{minHeight: "1000px"}} spacing={5} alignItems={"center"}>
+          <Typography sx={{textAlign: "center", fontSize: 44, fontWeight: "bold", maxWidth:{lg:"50%"}}} variant='h1'>
             <Image width={100} height={100} alt={'AI Flashcards'} src={'/icons/star.png'}/>
             Transform Your Learning with AI-Powered Flashcards
           </Typography>
-          <Typography sx={{fontSize: 24, textAlign:"center", maxWidth:{lg:"40%"}}} variant='h4'>
+          <Typography sx={{fontSize: 20, textAlign:"center", maxWidth:{lg:"40%"}}} variant='h4'>
             <Box component={'span'} color={"accent.accent5"}>AI-generated flashcards </Box>that adapt to your needs and help you retain information <Box component={'span'} color={"accent.accent5"}>more effectively</Box>
           </Typography>
           <Link href={'/generate'}>
-            <Button sx={{ fontWeight:"bold", fontSize: 24,py:2, px: 4}} variant='contained'>
+            <Button sx={{ fontWeight:"bold", fontSize: 16,py:1, px: 2}} variant='contained'>
               Get Started
             </Button>
           </Link>
