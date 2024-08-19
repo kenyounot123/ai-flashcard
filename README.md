@@ -1,36 +1,28 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Flash Prep AI – AI-Powered Flashcard Generator 📚🤖
+![flashprepai](https://github.com/user-attachments/assets/047fab2a-f48d-49ba-bab4-23559f4f7973)
 
-## Getting Started
+Welcome to **Flash Prep AI**, an AI-powered platform designed to level up your studying by generating flashcards from any content you provide. Whether you're prepping for an exam or exploring a new topic, Flash Prep AI simplifies the creation of study materials, allowing you to focus on learning more efficiently.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **AI-Powered Flashcard Generation**: Input content, and our AI will automatically generate a set of flashcards for you to study with.
+- **Effortless Study Set Creation**: Quickly build study sets from scratch without personalization (coming soon).
+- **User Authentication**: Secure sign-in and sign-up with Clerk.
+- **Stripe Integration**: Payment gateway using Stripe API for future premium features.
+- **Study Set Tracking**: Track your progress with a swiping feature to manage the cards in each study session.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: [Next.js](https://nextjs.org/) and [Material UI (MUI)](https://mui.com/) for a fast, responsive user interface.
+- **Database**: [Firebase](https://firebase.google.com/) to securely store and manage user data and flashcard sets.
+- **Authentication**: [Clerk](https://clerk.dev/) for user authentication and management.
+- **Payments**: [Stripe API](https://stripe.com/) for handling payment processing and premium features.
+- **AI Integration**: [OpenAI API](https://openai.com/api/) to generate flashcards from user-provided content.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## 🧑‍💻 Future Features
 
-## Learn More
+- Implementation of RAG for better generated flashcards.
+- Premium features like advanced study analytics and progress tracking.
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+As of Aug 19, here are the current stats,
+<img width="793" alt="image" src="https://github.com/user-attachments/assets/724e5d36-c5a2-47b1-bed6-57ec55398042">
